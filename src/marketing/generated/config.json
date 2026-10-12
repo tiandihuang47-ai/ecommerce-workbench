@@ -1,0 +1,1151 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-12T03:05:49.379Z",
+  "contentHash": "d61e14129a2d9796",
+  "groups": {
+    "strategies": [
+      {
+        "id": "benchmark_detail_replica",
+        "label": "对标详情图复刻",
+        "version": "1",
+        "active": true,
+        "kind": "detail_page",
+        "platforms": [
+          "ecommerce-detail"
+        ],
+        "businessGoals": [
+          "conversion",
+          "trust"
+        ],
+        "creativeType": "benchmark_detail_replica",
+        "defaultTextRequired": true,
+        "comparisonRequired": false,
+        "matchKeywords": [
+          "详情",
+          "详情图",
+          "复刻",
+          "对标",
+          "长图",
+          "结构",
+          "参考这个",
+          "版式"
+        ],
+        "focusTags": [
+          "structure",
+          "visual_benefit",
+          "functional_feature"
+        ],
+        "priority": 85,
+        "defaultPainPoint": "对标详情图的结构值得借鉴",
+        "defaultHook": "同样的结构，换成我自己的商品",
+        "defaultVisual": "沿用对标模块顺序与版式节奏，替换为用户商品",
+        "structure": [
+          "首屏价值",
+          "需求痛点",
+          "核心卖点",
+          "细节证明",
+          "使用场景",
+          "收束转化"
+        ],
+        "requiredElements": [
+          "沿用对标长图的模块顺序与版式节奏",
+          "用真实商品替换竞品主体"
+        ],
+        "file": "strategies/benchmark-detail-replica.md",
+        "guidance": "## 营销原则\n\n复刻的是对标详情图的“结构与版式节奏”，不是它的商品、品牌或文案。逐屏功能对应，内容全部换成用户自己的真实商品与事实。\n\n## 思考逻辑\n\n1. 先看清对标长图每一屏承担什么职责（首屏价值、痛点、卖点、细节、场景、收束）。\n2. 保持模块顺序、留白节奏和视觉层级，把主体替换为用户商品。\n3. 文案重写，只使用用户产品资料里的事实。\n4. 不复制竞品品牌名、logo、宣传语或具体数据。\n\n## 结构建议\n\n按对标模块逐一生成画面，每个模块只讲一件事，保持统一的配色与摄影语言。\n\n## 文案要求\n\n每个模块一个短标题加一句说明。所有卖点必须来自用户资料。\n\n## 视觉要求\n\n参考对标的构图、光影、留白和模块层级，但商品必须与用户参考图完全一致。\n\n## 禁忌\n\n不得复制竞品品牌、logo、文案、数据或认证。不得编造用户商品没有的卖点。\n\n## 成功标准\n\n整体节奏像对标详情图，但每一个商品细节和文案都属于用户自己的商品。",
+        "sections": [
+          {
+            "title": "营销原则",
+            "content": "复刻的是对标详情图的“结构与版式节奏”，不是它的商品、品牌或文案。逐屏功能对应，内容全部换成用户自己的真实商品与事实。"
+          },
+          {
+            "title": "思考逻辑",
+            "content": "1. 先看清对标长图每一屏承担什么职责（首屏价值、痛点、卖点、细节、场景、收束）。\n2. 保持模块顺序、留白节奏和视觉层级，把主体替换为用户商品。\n3. 文案重写，只使用用户产品资料里的事实。\n4. 不复制竞品品牌名、logo、宣传语或具体数据。"
+          },
+          {
+            "title": "结构建议",
+            "content": "按对标模块逐一生成画面，每个模块只讲一件事，保持统一的配色与摄影语言。"
+          },
+          {
+            "title": "文案要求",
+            "content": "每个模块一个短标题加一句说明。所有卖点必须来自用户资料。"
+          },
+          {
+            "title": "视觉要求",
+            "content": "参考对标的构图、光影、留白和模块层级，但商品必须与用户参考图完全一致。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得复制竞品品牌、logo、文案、数据或认证。不得编造用户商品没有的卖点。"
+          },
+          {
+            "title": "成功标准",
+            "content": "整体节奏像对标详情图，但每一个商品细节和文案都属于用户自己的商品。"
+          }
+        ]
+      },
+      {
+        "id": "detail_benefit",
+        "label": "卖点拆解",
+        "version": "1",
+        "active": true,
+        "kind": "image_text",
+        "platforms": [
+          "xiaohongshu",
+          "douyin"
+        ],
+        "businessGoals": [
+          "trust",
+          "conversion"
+        ],
+        "creativeType": "detail_benefit",
+        "defaultTextRequired": true,
+        "comparisonRequired": false,
+        "matchKeywords": [
+          "卖点",
+          "拆解",
+          "参数",
+          "材质",
+          "面料",
+          "填充",
+          "细节",
+          "工艺",
+          "功能",
+          "成分",
+          "测评",
+          "评测",
+          "值不值",
+          "好在哪",
+          "配置"
+        ],
+        "focusTags": [
+          "functional_feature",
+          "material",
+          "craft"
+        ],
+        "priority": 60,
+        "defaultPainPoint": "看不懂到底好在哪里",
+        "defaultHook": "一条一条讲清楚它好在哪",
+        "defaultVisual": "主卖点放大配细节镜头，其余卖点作为辅助标签",
+        "structure": [
+          "总览钩子",
+          "逐条卖点",
+          "细节证明",
+          "总结建议"
+        ],
+        "requiredElements": [
+          "2到4条真实卖点短句",
+          "对应的可见细节画面"
+        ],
+        "file": "strategies/detail-benefit.md",
+        "guidance": "## 营销原则\n\n把商品讲清楚，而不是堆形容词。每一条卖点都要能对应到画面里看得见的细节，并且能追溯到产品资料。\n\n## 思考逻辑\n\n1. 从产品事实里挑出最重要的 2 到 4 条，按重要性排序。\n2. 每条卖点配一个可见证据（面料、绗线、五金、版型、包装）。\n3. 明确哪一条是主卖点，不能所有卖点一样大。\n4. 只讲资料里有的事实，不脑补功效。\n\n## 结构建议\n\n可以用主图加细节图，或一张图内做主次层级：一个主卖点放大，其余作为辅助标签。\n\n## 文案要求\n\n主卖点 6 到 12 字，辅助卖点每条 4 到 10 字。用具体名词，不用“超好”“顶级”等空词。\n\n## 视觉要求\n\n细节镜头要真实、清晰，不能把成分、填充量或认证画成不存在的标签。\n\n## 禁忌\n\n不得编造参数、成分、认证、检测结论或功效。\n\n## 成功标准\n\n用户看完能复述出至少一条具体卖点，并相信它。",
+        "sections": [
+          {
+            "title": "营销原则",
+            "content": "把商品讲清楚，而不是堆形容词。每一条卖点都要能对应到画面里看得见的细节，并且能追溯到产品资料。"
+          },
+          {
+            "title": "思考逻辑",
+            "content": "1. 从产品事实里挑出最重要的 2 到 4 条，按重要性排序。\n2. 每条卖点配一个可见证据（面料、绗线、五金、版型、包装）。\n3. 明确哪一条是主卖点，不能所有卖点一样大。\n4. 只讲资料里有的事实，不脑补功效。"
+          },
+          {
+            "title": "结构建议",
+            "content": "可以用主图加细节图，或一张图内做主次层级：一个主卖点放大，其余作为辅助标签。"
+          },
+          {
+            "title": "文案要求",
+            "content": "主卖点 6 到 12 字，辅助卖点每条 4 到 10 字。用具体名词，不用“超好”“顶级”等空词。"
+          },
+          {
+            "title": "视觉要求",
+            "content": "细节镜头要真实、清晰，不能把成分、填充量或认证画成不存在的标签。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得编造参数、成分、认证、检测结论或功效。"
+          },
+          {
+            "title": "成功标准",
+            "content": "用户看完能复述出至少一条具体卖点，并相信它。"
+          }
+        ]
+      },
+      {
+        "id": "identity_hook",
+        "label": "人群身份代入",
+        "version": "1",
+        "active": true,
+        "kind": "image_text",
+        "platforms": [
+          "xiaohongshu",
+          "douyin"
+        ],
+        "businessGoals": [
+          "traffic",
+          "conversion"
+        ],
+        "creativeType": "identity_hook",
+        "defaultTextRequired": true,
+        "comparisonRequired": false,
+        "matchKeywords": [
+          "身份",
+          "人群",
+          "适合",
+          "微胖",
+          "小个子",
+          "妈妈",
+          "上班族",
+          "学生",
+          "宝妈",
+          "通勤党",
+          "梨形",
+          "苹果型",
+          "情侣",
+          "送人",
+          "送给"
+        ],
+        "focusTags": [
+          "target_audience",
+          "visual_benefit"
+        ],
+        "priority": 75,
+        "defaultPainPoint": "这类人群挑商品时总觉得不合身或不合适",
+        "defaultHook": "这类人终于有更合适的选择",
+        "defaultVisual": "商品或人物大图，标题区点名目标人群",
+        "structure": [
+          "点名人群",
+          "身份共鸣",
+          "商品解法",
+          "卖点支撑",
+          "行动引导"
+        ],
+        "requiredElements": [
+          "明确点名一类人群",
+          "一个主标题",
+          "2条以内卖点短句"
+        ],
+        "file": "strategies/identity-hook.md",
+        "guidance": "## 营销原则\n\n让特定人群一眼觉得“这说的就是我”。身份标签要具体、友好，不能刻板或冒犯。\n\n## 思考逻辑\n\n1. 从用户需求或商品资料里找出一个真实的目标人群特征（小个子、通勤党、微胖）。\n2. 标题直接点名这个人群，并说出他们的真实顾虑。\n3. 商品作为“为这类人准备的解法”出现，卖点围绕这个身份展开。\n\n## 结构建议\n\n商品或人物大图为主，标题区域突出人群关键词。可以叠加一句身份相关的短句。\n\n## 文案要求\n\n标题 8 到 16 字，包含一个具体人群词。语气亲切、平等，禁止制造身材或年龄焦虑。\n\n## 视觉要求\n\n人物气质与目标人群一致，状态自然。商品颜色、版型、结构与参考图一致。\n\n## 禁忌\n\n不得贬低任何人群，不制造焦虑，不编造“专为某人群研发”等无依据宣称。\n\n## 成功标准\n\n目标人群会觉得这是一条专门给他们看的内容。",
+        "sections": [
+          {
+            "title": "营销原则",
+            "content": "让特定人群一眼觉得“这说的就是我”。身份标签要具体、友好，不能刻板或冒犯。"
+          },
+          {
+            "title": "思考逻辑",
+            "content": "1. 从用户需求或商品资料里找出一个真实的目标人群特征（小个子、通勤党、微胖）。\n2. 标题直接点名这个人群，并说出他们的真实顾虑。\n3. 商品作为“为这类人准备的解法”出现，卖点围绕这个身份展开。"
+          },
+          {
+            "title": "结构建议",
+            "content": "商品或人物大图为主，标题区域突出人群关键词。可以叠加一句身份相关的短句。"
+          },
+          {
+            "title": "文案要求",
+            "content": "标题 8 到 16 字，包含一个具体人群词。语气亲切、平等，禁止制造身材或年龄焦虑。"
+          },
+          {
+            "title": "视觉要求",
+            "content": "人物气质与目标人群一致，状态自然。商品颜色、版型、结构与参考图一致。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得贬低任何人群，不制造焦虑，不编造“专为某人群研发”等无依据宣称。"
+          },
+          {
+            "title": "成功标准",
+            "content": "目标人群会觉得这是一条专门给他们看的内容。"
+          }
+        ]
+      },
+      {
+        "id": "pain_comparison",
+        "label": "痛点对比",
+        "version": "1",
+        "active": true,
+        "kind": "image_text",
+        "platforms": [
+          "xiaohongshu",
+          "douyin"
+        ],
+        "businessGoals": [
+          "traffic",
+          "conversion"
+        ],
+        "creativeType": "pain_comparison",
+        "defaultTextRequired": true,
+        "comparisonRequired": true,
+        "matchKeywords": [
+          "痛点",
+          "对比",
+          "显瘦",
+          "显胖",
+          "臃肿",
+          "差别",
+          "落差",
+          "以前",
+          "现在",
+          "踩雷",
+          "避雷",
+          "换季",
+          "之前",
+          "之后",
+          "对比图",
+          "强对比",
+          "反差"
+        ],
+        "focusTags": [
+          "visual_benefit",
+          "functional_feature"
+        ],
+        "priority": 90,
+        "defaultPainPoint": "用户对这个品类最常见的顾虑",
+        "defaultHook": "选对和没选对，差别有多大？",
+        "defaultVisual": "同一个人同一场景的左右或前后对比，左侧呈现困扰，右侧呈现改善",
+        "structure": [
+          "冲突提问",
+          "左侧痛点",
+          "右侧解法",
+          "卖点标签",
+          "行动引导"
+        ],
+        "requiredElements": [
+          "左右或前后的明确对比",
+          "一个主标题",
+          "2到3条卖点短句"
+        ],
+        "file": "strategies/pain-comparison.md",
+        "guidance": "## 营销原则\n\n先让目标用户看见自己正在经历的困扰，再用真实商品给出更利落的解法。冲突要具体、可感知，不能空喊口号。对比的存在是为了放大真实价值，不是为了贬低别人。\n\n## 思考逻辑\n\n1. 从商品事实里找一个用户最在意、又最容易在画面上看出来的痛点（如显胖、臃肿、不好搭）。\n2. 左侧呈现困扰，右侧呈现商品带来的改善；两侧必须是同一个人的同一场景，差别要一眼可见。\n3. 主标题制造一个小冲突或提问，让人产生“我是不是也这样”的代入。\n4. 卖点短句只挂 2 到 3 条，且必须来自产品资料，不能编造参数。\n\n## 结构建议\n\n画面以左右或前后对比为主结构；主标题在上方或中缝；左侧压暗、加少许冷调暗示困扰；右侧明亮、干净、突出商品。可以在左右各放一条对照短句。\n\n## 文案要求\n\n标题 8 到 16 字，用提问或反差句式。对照短句要口语、短、成对出现。禁止使用“全网最低”“绝对”“第一”等无法证明的说法。\n\n## 视觉要求\n\n人物、场景、光线、构图要真实。两侧商品的颜色、版型、结构、标识必须和参考图完全一致，不能为了对比效果偷偷改商品。\n\n## 禁忌\n\n不得编造价格、销量、检测报告、功效、代言或用户评价。不得把对比做成夸大前后差异的虚假效果。不得让左侧出现真实竞品品牌。\n\n## 成功标准\n\n用户第一眼能看懂“左边的问题、右边的解法”，并能在 3 秒内读出主卖点。",
+        "sections": [
+          {
+            "title": "营销原则",
+            "content": "先让目标用户看见自己正在经历的困扰，再用真实商品给出更利落的解法。冲突要具体、可感知，不能空喊口号。对比的存在是为了放大真实价值，不是为了贬低别人。"
+          },
+          {
+            "title": "思考逻辑",
+            "content": "1. 从商品事实里找一个用户最在意、又最容易在画面上看出来的痛点（如显胖、臃肿、不好搭）。\n2. 左侧呈现困扰，右侧呈现商品带来的改善；两侧必须是同一个人的同一场景，差别要一眼可见。\n3. 主标题制造一个小冲突或提问，让人产生“我是不是也这样”的代入。\n4. 卖点短句只挂 2 到 3 条，且必须来自产品资料，不能编造参数。"
+          },
+          {
+            "title": "结构建议",
+            "content": "画面以左右或前后对比为主结构；主标题在上方或中缝；左侧压暗、加少许冷调暗示困扰；右侧明亮、干净、突出商品。可以在左右各放一条对照短句。"
+          },
+          {
+            "title": "文案要求",
+            "content": "标题 8 到 16 字，用提问或反差句式。对照短句要口语、短、成对出现。禁止使用“全网最低”“绝对”“第一”等无法证明的说法。"
+          },
+          {
+            "title": "视觉要求",
+            "content": "人物、场景、光线、构图要真实。两侧商品的颜色、版型、结构、标识必须和参考图完全一致，不能为了对比效果偷偷改商品。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得编造价格、销量、检测报告、功效、代言或用户评价。不得把对比做成夸大前后差异的虚假效果。不得让左侧出现真实竞品品牌。"
+          },
+          {
+            "title": "成功标准",
+            "content": "用户第一眼能看懂“左边的问题、右边的解法”，并能在 3 秒内读出主卖点。"
+          }
+        ]
+      },
+      {
+        "id": "price_anchor",
+        "label": "价格反转 / 价值锚点",
+        "version": "1",
+        "active": true,
+        "kind": "image_text",
+        "platforms": [
+          "xiaohongshu",
+          "douyin"
+        ],
+        "businessGoals": [
+          "conversion"
+        ],
+        "creativeType": "price_anchor",
+        "defaultTextRequired": true,
+        "comparisonRequired": true,
+        "matchKeywords": [
+          "价格",
+          "划算",
+          "便宜",
+          "反季",
+          "优惠",
+          "性价比",
+          "省",
+          "折扣",
+          "原价",
+          "到手价",
+          "降价",
+          "值不值",
+          "值",
+          "预算",
+          "贵"
+        ],
+        "focusTags": [
+          "price_fact",
+          "visual_benefit"
+        ],
+        "priority": 80,
+        "defaultPainPoint": "不确定这个价格值不值得",
+        "defaultHook": "同样的预算，能得到什么？",
+        "defaultVisual": "商品大图突出质感与配置，用信息对比体现价值",
+        "structure": [
+          "价值反差",
+          "真实价格事实",
+          "商品展示",
+          "卖点补充",
+          "行动引导"
+        ],
+        "requiredElements": [
+          "一个主标题",
+          "真实可核对的价格或价值事实"
+        ],
+        "file": "strategies/price-anchor.md",
+        "guidance": "## 营销原则\n\n价格反转的核心是“价值感落差”，不是编造数字。只使用产品资料里明确写出的价格、规格或价值事实；资料没有价格时，绝不虚构，只能讲价值与理由。\n\n## 思考逻辑\n\n1. 先检查产品资料里有没有真实价格事实。有，就用真实数字讲“用这个价格能得到什么”；没有，就只讲“为什么值得”，不出现任何具体数字。\n2. 把“看似不便宜”或“不确定值不值”的心理，转化为“看完整价值后觉得划算”。\n3. 文字要克制，避免叫卖感。\n\n## 结构建议\n\n商品大图为主，标题在上方，价值事实以短标签呈现。对比可以体现在“一件的价格 / 得到的配置或场景”这种信息对比，而不是左右商品对比。\n\n## 文案要求\n\n标题 8 到 16 字，突出价值而非叫卖。价格类文字只能使用资料中的真实数字，并保留来源意识。禁止“全网最低”“历史最低”“清仓”等无法证明的表述。\n\n## 视觉要求\n\n商品清晰、干净，突出质感和配置。不要用价格标签、爆炸贴、促销红底等硬广元素。\n\n## 禁忌\n\n严禁编造原价、划线价、折扣、销量、限时优惠或倒计时。资料没有的价格一律不写。\n\n## 成功标准\n\n用户觉得“这个价格能拿到这些东西是合理的”，而不是被夸张数字刺激。",
+        "sections": [
+          {
+            "title": "营销原则",
+            "content": "价格反转的核心是“价值感落差”，不是编造数字。只使用产品资料里明确写出的价格、规格或价值事实；资料没有价格时，绝不虚构，只能讲价值与理由。"
+          },
+          {
+            "title": "思考逻辑",
+            "content": "1. 先检查产品资料里有没有真实价格事实。有，就用真实数字讲“用这个价格能得到什么”；没有，就只讲“为什么值得”，不出现任何具体数字。\n2. 把“看似不便宜”或“不确定值不值”的心理，转化为“看完整价值后觉得划算”。\n3. 文字要克制，避免叫卖感。"
+          },
+          {
+            "title": "结构建议",
+            "content": "商品大图为主，标题在上方，价值事实以短标签呈现。对比可以体现在“一件的价格 / 得到的配置或场景”这种信息对比，而不是左右商品对比。"
+          },
+          {
+            "title": "文案要求",
+            "content": "标题 8 到 16 字，突出价值而非叫卖。价格类文字只能使用资料中的真实数字，并保留来源意识。禁止“全网最低”“历史最低”“清仓”等无法证明的表述。"
+          },
+          {
+            "title": "视觉要求",
+            "content": "商品清晰、干净，突出质感和配置。不要用价格标签、爆炸贴、促销红底等硬广元素。"
+          },
+          {
+            "title": "禁忌",
+            "content": "严禁编造原价、划线价、折扣、销量、限时优惠或倒计时。资料没有的价格一律不写。"
+          },
+          {
+            "title": "成功标准",
+            "content": "用户觉得“这个价格能拿到这些东西是合理的”，而不是被夸张数字刺激。"
+          }
+        ]
+      },
+      {
+        "id": "scenario_hook",
+        "label": "场景种草",
+        "version": "1",
+        "active": true,
+        "kind": "image_text",
+        "platforms": [
+          "xiaohongshu",
+          "douyin"
+        ],
+        "businessGoals": [
+          "traffic",
+          "engagement"
+        ],
+        "creativeType": "scenario_hook",
+        "defaultTextRequired": true,
+        "comparisonRequired": false,
+        "matchKeywords": [
+          "场景",
+          "种草",
+          "日常",
+          "通勤",
+          "过年",
+          "回家",
+          "约会",
+          "出门",
+          "真实用户",
+          "分享",
+          "生活",
+          "氛围",
+          "穿搭",
+          "使用场景"
+        ],
+        "focusTags": [
+          "usage_scene",
+          "emotional_value",
+          "visual_benefit"
+        ],
+        "priority": 70,
+        "defaultPainPoint": "用户在这个生活场景里想要的那种感觉",
+        "defaultHook": "把喜欢放进日常里",
+        "defaultVisual": "真实生活场景中商品自然出现，光线自然、状态松弛",
+        "structure": [
+          "生活场景",
+          "情绪代入",
+          "商品自然出现",
+          "卖点轻提示",
+          "收藏引导"
+        ],
+        "requiredElements": [
+          "具体生活场景",
+          "一个主标题",
+          "1到2条卖点短句"
+        ],
+        "file": "strategies/scenario-hook.md",
+        "guidance": "## 营销原则\n\n不要像广告，要像真实用户随手分享的日常。先建立一个具体、可信、有情绪的生活时刻，再让商品自然地出现在这个时刻里。\n\n## 思考逻辑\n\n1. 从用户的话里提取一个具体场景（回家过年、冬季通勤、周末出门）。\n2. 先想“用户在这个场景里想要什么感觉”，再让商品成为这种感觉的一部分。\n3. 文字要像朋友随口说的话，不要写产品说明书。\n4. 卖点只轻轻带过 1 到 2 条，重点是氛围和代入。\n\n## 结构建议\n\n单张大图为主，构图像手机随手拍。主标题放在安全留白区，语气口语。可以让商品占画面主体，但不要求对称摆拍。\n\n## 文案要求\n\n标题 10 到 20 字，第一人称或对朋友说话的口吻。避免“震撼”“必买”“神器”等硬广词。卖点短句只保留最能打动人心的 1 到 2 条。\n\n## 视觉要求\n\n场景要真实可辨，光线自然，人物状态松弛。商品颜色、版型、标识与参考图一致。\n\n## 禁忌\n\n不得编造使用效果、价格、销量或用户评价。不得把场景做成过度精致的棚拍广告。\n\n## 成功标准\n\n看起来像真实用户发的笔记，读者能自然代入这个场景。",
+        "sections": [
+          {
+            "title": "营销原则",
+            "content": "不要像广告，要像真实用户随手分享的日常。先建立一个具体、可信、有情绪的生活时刻，再让商品自然地出现在这个时刻里。"
+          },
+          {
+            "title": "思考逻辑",
+            "content": "1. 从用户的话里提取一个具体场景（回家过年、冬季通勤、周末出门）。\n2. 先想“用户在这个场景里想要什么感觉”，再让商品成为这种感觉的一部分。\n3. 文字要像朋友随口说的话，不要写产品说明书。\n4. 卖点只轻轻带过 1 到 2 条，重点是氛围和代入。"
+          },
+          {
+            "title": "结构建议",
+            "content": "单张大图为主，构图像手机随手拍。主标题放在安全留白区，语气口语。可以让商品占画面主体，但不要求对称摆拍。"
+          },
+          {
+            "title": "文案要求",
+            "content": "标题 10 到 20 字，第一人称或对朋友说话的口吻。避免“震撼”“必买”“神器”等硬广词。卖点短句只保留最能打动人心的 1 到 2 条。"
+          },
+          {
+            "title": "视觉要求",
+            "content": "场景要真实可辨，光线自然，人物状态松弛。商品颜色、版型、标识与参考图一致。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得编造使用效果、价格、销量或用户评价。不得把场景做成过度精致的棚拍广告。"
+          },
+          {
+            "title": "成功标准",
+            "content": "看起来像真实用户发的笔记，读者能自然代入这个场景。"
+          }
+        ]
+      }
+    ],
+    "platforms": [
+      {
+        "id": "douyin",
+        "label": "抖音",
+        "version": "1",
+        "platforms": [
+          "douyin"
+        ],
+        "tone": "直接、有节奏、利益点前置",
+        "headlineMaxChars": 16,
+        "bodyMaxChars": 70,
+        "emojiLevel": "少",
+        "textRequiredByDefault": true,
+        "copyRules": [
+          "前三秒就要给出利益点或反差点",
+          "标题短、冲击力强，但不虚假",
+          "正文一条一个信息，避免长句"
+        ],
+        "visualRules": [
+          "竖版构图，主体大、对比强",
+          "画面节奏明快，重点突出",
+          "文字大而清楚，远看也能读"
+        ],
+        "forbidden": [
+          "全网最低",
+          "绝对",
+          "第一",
+          "限时秒杀（无依据时）",
+          "医疗或功效承诺"
+        ],
+        "file": "platforms/douyin.md",
+        "guidance": "## 平台特征\n\n抖音图文更强调快速抓人和利益点前置。信息要短、准、直接，但不能靠虚假承诺换停留。\n\n## 标题规则\n\n6 到 16 字，利益点或反差前置，避免长句。\n\n## 正文规则\n\n一条一个信息点，总字数 70 字以内。结尾给一个明确的行动或互动引导。\n\n## 视觉规则\n\n竖版、主体大、对比强。文字要在安全区内足够大，不能压在商品或人脸上。",
+        "sections": [
+          {
+            "title": "平台特征",
+            "content": "抖音图文更强调快速抓人和利益点前置。信息要短、准、直接，但不能靠虚假承诺换停留。"
+          },
+          {
+            "title": "标题规则",
+            "content": "6 到 16 字，利益点或反差前置，避免长句。"
+          },
+          {
+            "title": "正文规则",
+            "content": "一条一个信息点，总字数 70 字以内。结尾给一个明确的行动或互动引导。"
+          },
+          {
+            "title": "视觉规则",
+            "content": "竖版、主体大、对比强。文字要在安全区内足够大，不能压在商品或人脸上。"
+          }
+        ]
+      },
+      {
+        "id": "ecommerce-detail",
+        "label": "电商详情",
+        "version": "1",
+        "platforms": [
+          "ecommerce-detail"
+        ],
+        "tone": "清晰、可信、信息完整",
+        "headlineMaxChars": 24,
+        "bodyMaxChars": 120,
+        "emojiLevel": "无",
+        "textRequiredByDefault": true,
+        "copyRules": [
+          "逐屏一个职责，先价值后证据",
+          "卖点具体到材质、工艺、规格",
+          "不用情绪词代替事实"
+        ],
+        "visualRules": [
+          "模块顺序和留白节奏稳定",
+          "商品主体清晰，细节镜头真实",
+          "文字层级分明，主标题最大"
+        ],
+        "forbidden": [
+          "全网最低",
+          "绝对",
+          "第一",
+          "检测报告（无依据时）",
+          "功效承诺"
+        ],
+        "file": "platforms/ecommerce-detail.md",
+        "guidance": "## 平台特征\n\n电商详情页需要信息完整、层级清楚、逐屏推进，让用户逐步建立信任。\n\n## 标题规则\n\n每屏一个短标题，12 到 24 字，说明本屏讲什么。\n\n## 正文规则\n\n先价值、后证据；卖点写具体材质、工艺或规格，不写空泛形容词。\n\n## 视觉规则\n\n模块顺序与留白节奏稳定，商品主体清晰，文字层级分明。",
+        "sections": [
+          {
+            "title": "平台特征",
+            "content": "电商详情页需要信息完整、层级清楚、逐屏推进，让用户逐步建立信任。"
+          },
+          {
+            "title": "标题规则",
+            "content": "每屏一个短标题，12 到 24 字，说明本屏讲什么。"
+          },
+          {
+            "title": "正文规则",
+            "content": "先价值、后证据；卖点写具体材质、工艺或规格，不写空泛形容词。"
+          },
+          {
+            "title": "视觉规则",
+            "content": "模块顺序与留白节奏稳定，商品主体清晰，文字层级分明。"
+          }
+        ]
+      },
+      {
+        "id": "xiaohongshu",
+        "label": "小红书",
+        "version": "1",
+        "platforms": [
+          "xiaohongshu"
+        ],
+        "tone": "真实分享、口语化、克制、有生活感",
+        "headlineMaxChars": 20,
+        "bodyMaxChars": 90,
+        "emojiLevel": "少",
+        "textRequiredByDefault": true,
+        "copyRules": [
+          "标题像朋友说话，不要像广告语",
+          "正文分点、短句，一段一个意思",
+          "少用感叹号和夸张词",
+          "卖点只讲最打动人的两三条"
+        ],
+        "visualRules": [
+          "手机随手拍的生活质感优先",
+          "光线自然，构图不必对称",
+          "文字排版克制，留白干净"
+        ],
+        "forbidden": [
+          "全网最低",
+          "绝对",
+          "第一",
+          "权威认证（无依据时）",
+          "医疗或功效承诺"
+        ],
+        "file": "platforms/xiaohongshu.md",
+        "guidance": "## 平台特征\n\n小红书用户更在意真实体验和可参考性，反感硬广腔和过度修图。标题和正文要像真实用户分享。\n\n## 标题规则\n\n8 到 20 字，第一人称或提问式。可用具体场景、人群或反差，但不要堆砌 emoji。\n\n## 正文规则\n\n短句分点，一段一个意思，总字数控制在 90 字以内。结尾给一个克制的收藏或提问引导。\n\n## 视觉规则\n\n生活感优先，商品真实出现在场景中。文字排版干净、层级清楚，不要拼贴成海报。",
+        "sections": [
+          {
+            "title": "平台特征",
+            "content": "小红书用户更在意真实体验和可参考性，反感硬广腔和过度修图。标题和正文要像真实用户分享。"
+          },
+          {
+            "title": "标题规则",
+            "content": "8 到 20 字，第一人称或提问式。可用具体场景、人群或反差，但不要堆砌 emoji。"
+          },
+          {
+            "title": "正文规则",
+            "content": "短句分点，一段一个意思，总字数控制在 90 字以内。结尾给一个克制的收藏或提问引导。"
+          },
+          {
+            "title": "视觉规则",
+            "content": "生活感优先，商品真实出现在场景中。文字排版干净、层级清楚，不要拼贴成海报。"
+          }
+        ]
+      }
+    ],
+    "copy": [
+      {
+        "id": "cta-rules",
+        "label": "行动引导规则",
+        "version": "1",
+        "scope": "cta",
+        "maxChars": 14,
+        "styles": {
+          "xiaohongshu": "收藏或提问",
+          "douyin": "评论或点击",
+          "ecommerce-detail": "按需选择"
+        },
+        "banned": [
+          "马上抢",
+          "最后一天",
+          "不买后悔"
+        ],
+        "file": "copy/cta-rules.md",
+        "guidance": "## 目的\n\n让结尾有一个自然、不逼迫的行动引导。\n\n## 写法\n\n1. 用低压力措辞，如“先收藏”“按需选择”“你更在意哪一点”。\n2. 不使用虚假的限时、限量或恐吓式表达。\n3. 长度控制在 14 字以内。\n\n## 禁忌\n\n不得编造限时、限量、折扣或库存信息。",
+        "sections": [
+          {
+            "title": "目的",
+            "content": "让结尾有一个自然、不逼迫的行动引导。"
+          },
+          {
+            "title": "写法",
+            "content": "1. 用低压力措辞，如“先收藏”“按需选择”“你更在意哪一点”。\n2. 不使用虚假的限时、限量或恐吓式表达。\n3. 长度控制在 14 字以内。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得编造限时、限量、折扣或库存信息。"
+          }
+        ]
+      },
+      {
+        "id": "headline-rules",
+        "label": "标题规则",
+        "version": "1",
+        "scope": "headline",
+        "maxCharsByPlatform": {
+          "xiaohongshu": 20,
+          "douyin": 16,
+          "ecommerce-detail": 24
+        },
+        "preferredShapes": [
+          "提问式",
+          "反差式",
+          "点名人群式",
+          "场景式"
+        ],
+        "banned": [
+          "全网最低",
+          "绝对",
+          "第一",
+          "100%",
+          "包治"
+        ],
+        "file": "copy/headline-rules.md",
+        "guidance": "## 目的\n\n统一所有平台的标题风格，让标题抓人但可核查。\n\n## 写法\n\n1. 先写清“这条内容解决谁的什么问题”。\n2. 用具体名词和场景，不用空泛形容词。\n3. 字数按平台限制收敛。\n4. 禁止无法证明的极限词和功效承诺。\n\n## 禁忌\n\n不得编造价格、销量、认证、检测报告、代言或用户评价。",
+        "sections": [
+          {
+            "title": "目的",
+            "content": "统一所有平台的标题风格，让标题抓人但可核查。"
+          },
+          {
+            "title": "写法",
+            "content": "1. 先写清“这条内容解决谁的什么问题”。\n2. 用具体名词和场景，不用空泛形容词。\n3. 字数按平台限制收敛。\n4. 禁止无法证明的极限词和功效承诺。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得编造价格、销量、认证、检测报告、代言或用户评价。"
+          }
+        ]
+      },
+      {
+        "id": "selling-point-rules",
+        "label": "卖点规则",
+        "version": "1",
+        "scope": "selling-point",
+        "maxPrimary": 1,
+        "maxSecondary": 3,
+        "labelsMaxChars": 10,
+        "banned": [
+          "顶级",
+          "完美",
+          "永久",
+          "零风险"
+        ],
+        "file": "copy/selling-point-rules.md",
+        "guidance": "## 目的\n\n保证画面上的每一条卖点都来自真实产品事实，并且主次分明。\n\n## 选点顺序\n\n1. 用户明确强调的卖点优先。\n2. 与当前营销策略最匹配的卖点其次。\n3. 有可见证据（材质、工艺、结构）的卖点优先于只有文字描述的卖点。\n4. 最多一个主卖点，最多三条辅助卖点。\n\n## 写法\n\n卖点标签 4 到 10 字，用具体名词。每条卖点都必须能在产品资料里找到出处。\n\n## 禁忌\n\n不得把成分、填充量、认证或功效写成资料里没有的标签。",
+        "sections": [
+          {
+            "title": "目的",
+            "content": "保证画面上的每一条卖点都来自真实产品事实，并且主次分明。"
+          },
+          {
+            "title": "选点顺序",
+            "content": "1. 用户明确强调的卖点优先。\n2. 与当前营销策略最匹配的卖点其次。\n3. 有可见证据（材质、工艺、结构）的卖点优先于只有文字描述的卖点。\n4. 最多一个主卖点，最多三条辅助卖点。"
+          },
+          {
+            "title": "写法",
+            "content": "卖点标签 4 到 10 字，用具体名词。每条卖点都必须能在产品资料里找到出处。"
+          },
+          {
+            "title": "禁忌",
+            "content": "不得把成分、填充量、认证或功效写成资料里没有的标签。"
+          }
+        ]
+      }
+    ],
+    "product-fidelity": [
+      {
+        "id": "fidelity-rules",
+        "label": "商品高保真规则",
+        "version": "1",
+        "priority": "highest",
+        "criticalFeatureLabels": [
+          "颜色",
+          "色号",
+          "版型",
+          "长度",
+          "廓形",
+          "绗缝",
+          "格数",
+          "口袋",
+          "拉链",
+          "五金",
+          "抽绳",
+          "领型",
+          "高领",
+          "立领",
+          "连帽",
+          "帽子",
+          "内里",
+          "袖口",
+          "下摆",
+          "标识",
+          "logo",
+          "字母",
+          "袖章",
+          "印花",
+          "图案",
+          "装饰",
+          "纽扣"
+        ],
+        "mustNotInvent": [
+          "不得新增商品上没有的绗缝、口袋、拉链、抽绳或装饰",
+          "不得新增商品上没有的标识、字母、印花或图案",
+          "不得把资料中没有的成分、填充量、认证或功能画成画面标签",
+          "不得虚构模特、代言或使用效果"
+        ],
+        "logoRules": [
+          "Logo、胸口字母、袖口字母必须照参考图原样呈现，文字内容、字体风格、大小与位置均不得改变",
+          "不得镜像、旋转、重排或艺术化处理商品上的文字与标识",
+          "不得因为构图或文字排版而遮挡商品上的 logo 与标识"
+        ],
+        "textOnProductRules": [
+          "商品本体上原有的缝制商标、吊牌、印花和包装字样属于商品的一部分，必须保留",
+          "商品本体文字不属于营销文案，不得替换成别的字"
+        ],
+        "colorRules": [
+          "商品颜色必须忠实还原参考图，不得为配合场景、品牌色或对比效果改变色相、明度或饱和度",
+          "内里颜色、五金颜色同样不得改变"
+        ],
+        "shapeRules": [
+          "衣长、版型、肩线、袖长、下摆形态必须与参考图一致",
+          "横向与纵向绗缝走向、格数必须一致",
+          "领口、袖口、口袋、拉链的结构与位置必须一致"
+        ],
+        "file": "product-fidelity/fidelity-rules.md",
+        "guidance": "## 说明\n\n商品正确是底线。商品准确度 > 营销创意 > 视觉好看。\n\n生成过程中，以上规则是 Hard Constraints。除非用户在自然语言里明确要求修改某个结构，否则不得重新设计、自由发挥、移动 Logo、改变衣长或绗缝、增加商品上不存在的设计。\n\n如果出现商品跑样（颜色、版型、结构、Logo 与参考图不一致），整张图直接视为失败。\n\n以后用户说「衣服总是跑样」，主要改这个文件。",
+        "sections": [
+          {
+            "title": "说明",
+            "content": "商品正确是底线。商品准确度 > 营销创意 > 视觉好看。\n\n生成过程中，以上规则是 Hard Constraints。除非用户在自然语言里明确要求修改某个结构，否则不得重新设计、自由发挥、移动 Logo、改变衣长或绗缝、增加商品上不存在的设计。\n\n如果出现商品跑样（颜色、版型、结构、Logo 与参考图不一致），整张图直接视为失败。\n\n以后用户说「衣服总是跑样」，主要改这个文件。"
+          }
+        ]
+      }
+    ],
+    "typography": [
+      {
+        "id": "typography-rules",
+        "label": "中文营销排版",
+        "version": "1",
+        "textMode": "overlay",
+        "templates": [
+          "pain_comparison",
+          "scenario_hook",
+          "detail_benefit"
+        ],
+        "headlineMaxChars": 18,
+        "subheadlineMaxChars": 22,
+        "sellingPointMaxChars": 10,
+        "maxSellingPoints": 3,
+        "defaultFontFamily": "sans",
+        "palette": {
+          "headlineColor": "#FFFFFF",
+          "subheadlineColor": "#FFFFFF",
+          "sellingPointColor": "#FFFFFF",
+          "ctaColor": "#FFFFFF",
+          "panelColor": "#1F1A17",
+          "panelOpacity": 0.42
+        },
+        "geometry": {
+          "pain_comparison": {
+            "headline": {
+              "x": 0.06,
+              "y": 0.05,
+              "width": 0.88,
+              "height": 0.2,
+              "fontSize": 0.058,
+              "fontWeight": 800,
+              "lineHeight": 1.18,
+              "align": "left"
+            },
+            "subheadline": {
+              "x": 0.06,
+              "y": 0.25,
+              "width": 0.66,
+              "height": 0.09,
+              "fontSize": 0.03,
+              "fontWeight": 600,
+              "lineHeight": 1.3,
+              "align": "left"
+            },
+            "comparison_left": {
+              "x": 0.05,
+              "y": 0.64,
+              "width": 0.43,
+              "height": 0.13,
+              "fontSize": 0.031,
+              "fontWeight": 700,
+              "lineHeight": 1.25,
+              "align": "left",
+              "background": "#1F1A17",
+              "backgroundOpacity": 0.5
+            },
+            "comparison_right": {
+              "x": 0.52,
+              "y": 0.64,
+              "width": 0.43,
+              "height": 0.13,
+              "fontSize": 0.031,
+              "fontWeight": 700,
+              "lineHeight": 1.25,
+              "align": "left",
+              "background": "#7B2D35",
+              "backgroundOpacity": 0.62
+            },
+            "selling_point": {
+              "x": 0.06,
+              "y": 0.4,
+              "width": 0.52,
+              "height": 0.062,
+              "gap": 0.078,
+              "fontSize": 0.027,
+              "fontWeight": 600,
+              "lineHeight": 1.2,
+              "align": "left",
+              "background": "#1F1A17",
+              "backgroundOpacity": 0.46
+            },
+            "cta": {
+              "x": 0.3,
+              "y": 0.88,
+              "width": 0.4,
+              "height": 0.07,
+              "fontSize": 0.03,
+              "fontWeight": 600,
+              "lineHeight": 1.2,
+              "align": "center",
+              "background": "#7B2D35",
+              "backgroundOpacity": 0.7
+            }
+          },
+          "scenario_hook": {
+            "headline": {
+              "x": 0.07,
+              "y": 0.07,
+              "width": 0.86,
+              "height": 0.2,
+              "fontSize": 0.056,
+              "fontWeight": 800,
+              "lineHeight": 1.18,
+              "align": "left"
+            },
+            "subheadline": {
+              "x": 0.07,
+              "y": 0.28,
+              "width": 0.7,
+              "height": 0.09,
+              "fontSize": 0.029,
+              "fontWeight": 600,
+              "lineHeight": 1.3,
+              "align": "left"
+            },
+            "selling_point": {
+              "x": 0.07,
+              "y": 0.74,
+              "width": 0.6,
+              "height": 0.06,
+              "gap": 0.072,
+              "fontSize": 0.026,
+              "fontWeight": 600,
+              "lineHeight": 1.2,
+              "align": "left",
+              "background": "#1F1A17",
+              "backgroundOpacity": 0.42
+            },
+            "cta": {
+              "x": 0.32,
+              "y": 0.89,
+              "width": 0.36,
+              "height": 0.065,
+              "fontSize": 0.028,
+              "fontWeight": 600,
+              "lineHeight": 1.2,
+              "align": "center",
+              "background": "#7B2D35",
+              "backgroundOpacity": 0.68
+            }
+          },
+          "detail_benefit": {
+            "headline": {
+              "x": 0.06,
+              "y": 0.05,
+              "width": 0.88,
+              "height": 0.16,
+              "fontSize": 0.05,
+              "fontWeight": 800,
+              "lineHeight": 1.18,
+              "align": "left"
+            },
+            "subheadline": {
+              "x": 0.06,
+              "y": 0.21,
+              "width": 0.8,
+              "height": 0.08,
+              "fontSize": 0.028,
+              "fontWeight": 600,
+              "lineHeight": 1.3,
+              "align": "left"
+            },
+            "selling_point": {
+              "x": 0.06,
+              "y": 0.36,
+              "width": 0.56,
+              "height": 0.07,
+              "gap": 0.09,
+              "fontSize": 0.028,
+              "fontWeight": 600,
+              "lineHeight": 1.2,
+              "align": "left",
+              "background": "#1F1A17",
+              "backgroundOpacity": 0.44
+            },
+            "cta": {
+              "x": 0.3,
+              "y": 0.88,
+              "width": 0.4,
+              "height": 0.07,
+              "fontSize": 0.028,
+              "fontWeight": 600,
+              "lineHeight": 1.2,
+              "align": "center",
+              "background": "#7B2D35",
+              "backgroundOpacity": 0.68
+            }
+          }
+        },
+        "fonts": {
+          "sans": "PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, Microsoft YaHei, sans-serif",
+          "serif": "Songti SC, Noto Serif CJK SC, serif",
+          "rounded": "PingFang SC, Arial Rounded MT Bold, sans-serif"
+        },
+        "file": "typography/typography-rules.md",
+        "guidance": "## 说明\n\n生图模型只负责画干净底图并预留文案安全区；中文营销文字由程序用真实系统字体渲染，再叠加到底图上。\n\n这样可以保证：字是正确的、不会乱码、可以修改、可以重新渲染，不把文字烧死在模型结果里。\n\nV1 只做三套模板：pain_comparison、scenario_hook、detail_benefit。每套支持主标题、副标题、1 到 3 个卖点、可选行动引导。\n\n以后用户说「排版太乱」「字号太小」「文字太多」，主要改这个文件。",
+        "sections": [
+          {
+            "title": "说明",
+            "content": "生图模型只负责画干净底图并预留文案安全区；中文营销文字由程序用真实系统字体渲染，再叠加到底图上。\n\n这样可以保证：字是正确的、不会乱码、可以修改、可以重新渲染，不把文字烧死在模型结果里。\n\nV1 只做三套模板：pain_comparison、scenario_hook、detail_benefit。每套支持主标题、副标题、1 到 3 个卖点、可选行动引导。\n\n以后用户说「排版太乱」「字号太小」「文字太多」，主要改这个文件。"
+          }
+        ]
+      }
+    ],
+    "qa": [
+      {
+        "id": "marketing-qa",
+        "label": "营销质检",
+        "version": "1",
+        "failStatusCode": "MARKETING_INTENT_FAILED",
+        "checks": [
+          {
+            "id": "product_fidelity",
+            "label": "商品还原度",
+            "required": true,
+            "description": "生成图中的商品颜色、版型、结构、标识是否与参考图一致。"
+          },
+          {
+            "id": "marketing_intent",
+            "label": "营销意图执行",
+            "required": true,
+            "description": "是否真正执行了用户要求的营销策略，而不是退化成普通场景图。"
+          },
+          {
+            "id": "selling_point_presence",
+            "label": "卖点是否出现",
+            "required": true,
+            "description": "要求出现的卖点是否真的在画面文案或视觉中体现。"
+          },
+          {
+            "id": "text_requirement",
+            "label": "文字要求",
+            "required": true,
+            "description": "用户要求画面文字时，画面是否真的有清晰可读的中文营销文字。"
+          },
+          {
+            "id": "message_hierarchy",
+            "label": "信息层级",
+            "required": true,
+            "description": "是否有明确的主标题与辅助信息层级，而不是一堆同级文字。"
+          },
+          {
+            "id": "platform_fit",
+            "label": "平台适配",
+            "required": true,
+            "description": "是否符合目标平台的内容风格与文字规范。"
+          },
+          {
+            "id": "generic_image",
+            "label": "通用图检测",
+            "required": true,
+            "description": "是否又退化成没有营销结构的普通人物图或场景图。"
+          },
+          {
+            "id": "primary_message",
+            "label": "单一主主题",
+            "required": true,
+            "description": "是否只有一个清晰主主题，没有同时主打多个卖点。"
+          },
+          {
+            "id": "information_overload",
+            "label": "信息过载",
+            "required": true,
+            "description": "主卖点是否 1 个、辅助卖点是否不超过 3 个、文字密度是否受控。"
+          },
+          {
+            "id": "copy_accuracy",
+            "label": "文案一致性",
+            "required": true,
+            "description": "画面上的中文文案是否与计划一致，没有错字或缺失。"
+          },
+          {
+            "id": "text_readability",
+            "label": "文字可读性",
+            "required": true,
+            "description": "中文是否清晰可读、不遮挡主体；程序排版时应天然满足。"
+          },
+          {
+            "id": "truthfulness",
+            "label": "真实性",
+            "required": true,
+            "description": "是否出现产品资料中不存在的价格、销量、认证、功效或评价。"
+          }
+        ],
+        "file": "qa/marketing-qa.md",
+        "guidance": "## 说明\n\n营销质检与生图成功是两件事。图片生成成功，不代表营销任务成功。\n\n当用户明确要求营销文字和卖点时，如果最终画面没有任何文字或卖点结构，必须标记为 MARKETING_INTENT_FAILED / TEXT_REQUIRED_MISSING。\n\n商品跑样标记为 PRODUCT_FIDELITY_FAILED；信息堆砌标记为 INFORMATION_OVERLOAD；文案与计划不一致标记为 COPY_MISMATCH。\n\n生图 API 成功（ImageGenerationSuccess）与营销任务成功（MarketingTaskSuccess）必须分开记录。\n\n视觉能力可用时用视觉模型核对文字与商品；不可用时明确记录 unavailable，不得假装识别成功。",
+        "sections": [
+          {
+            "title": "说明",
+            "content": "营销质检与生图成功是两件事。图片生成成功，不代表营销任务成功。\n\n当用户明确要求营销文字和卖点时，如果最终画面没有任何文字或卖点结构，必须标记为 MARKETING_INTENT_FAILED / TEXT_REQUIRED_MISSING。\n\n商品跑样标记为 PRODUCT_FIDELITY_FAILED；信息堆砌标记为 INFORMATION_OVERLOAD；文案与计划不一致标记为 COPY_MISMATCH。\n\n生图 API 成功（ImageGenerationSuccess）与营销任务成功（MarketingTaskSuccess）必须分开记录。\n\n视觉能力可用时用视觉模型核对文字与商品；不可用时明确记录 unavailable，不得假装识别成功。"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "name": "director-platform",
+  "version": "0.1.0",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "next dev",
+    "predev": "node scripts/build-marketing-config.mjs",
+    "marketing:build": "node scripts/build-marketing-config.mjs",
+    "prebuild": "node scripts/build-marketing-config.mjs",
+    "build": "next build",
+    "crawler": "node crawler-service/server.mjs",
+    "crawler:dev": "node crawler-service/server.mjs",
+    "debug:comments": "node scripts/debug-comments.mjs",
+    "debug:deconstruction": "node scripts/debug-deconstruction.mjs",
+    "debug:douyin": "node scripts/debug-douyin.mjs",
+    "debug:transcript": "node scripts/debug-transcript.mjs",
+    "debug:transcript:file": "node scripts/debug-transcript-file.mjs",
+    "desktop:dev": "node scripts/start-desktop.js --development",
+    "desktop:build": "node scripts/build-desktop.js",
+    "desktop:ship": "node scripts/ship-desktop.mjs",
+    "desktop:start": "node scripts/start-desktop.js --production",
+    "test:smoke": "node scripts/desktop-smoke-test.mjs",
+    "test:skill-runtime": "node scripts/test-skill-runtime.mjs",
+    "test:skill-chat": "node scripts/test-skill-chat-integration.mjs",
+    "test:commerce-image": "node scripts/test-commerce-image.mjs",
+    "test:marketing-engine": "node scripts/test-marketing-engine.mjs",
+    "lint": "tsc --noEmit",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "fontkit": "^2.0.4",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.468.0",
+    "mammoth": "^1.12.0",
+    "next": "^15.3.0",
+    "openai": "^6.42.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "sharp": "^0.35.4",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  },
+  "build": {
+    "appId": "com.director.platform",
+    "productName": "编导中台",
+    "electronDist": "node_modules/electron/dist",
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "package.json",
+      "!node_modules/**/*"
+    ],
+    "mac": {
+      "target": [
+        "dir"
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "extraResources": [
+      {
+        "from": "external-tools/douyin-importer",
+        "to": "douyin-importer"
+      }
+    ]
+  },
+  "license": "MIT",
+  "overrides": {
+    "next": {
+      "postcss": "8.5.29"
+    }
+  }
+}

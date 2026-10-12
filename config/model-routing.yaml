@@ -1,0 +1,204 @@
+# ============================================================================
+# 功能 → 模型（model-routing.yaml）
+#
+# ★★★ 这是你平时唯一需要改的文件 ★★★
+#
+# 换模型怎么做：
+#   1. 找到下面要做那个功能（route），例如 script_generation；
+#   2. 把 model: 后面的名字改掉，例如改成 deepseek_v4_flash；
+#   3. 保存；
+#   4. 完全退出并重新打开 App（不用改任何 TypeScript）。
+#
+# 可用的模型别名（alias）见 config/models.yaml 的 models 段落：
+#   opus_5_5 / deepseek_v4_flash / doubao_vision / doubao_asr /
+#   seedream_5_pro / seedream_5 / gpt_image_2_5 / gpt_image_2
+#
+# 写错模型名不会“悄悄换一个模型”，而是启动/调用时直接报错，
+# 报错里会写清楚是哪个功能引用了不存在的模型。
+#
+# 可选字段（只有确实需要时才加）：
+#   temperature: 0.7        # 覆盖业务代码里的默认温度
+#   max_tokens: 8000        # 覆盖最大输出长度
+#   fallback: deepseek_v4_flash   # 主模型不可用时回退到哪个模型；写 none 表示不回退
+# ============================================================================
+
+routes:
+
+  # ======================= 文本 =======================
+
+  # AI 对话（右下角/独立页面的对话助手）
+  # 按需求：不回退，模型不可用时直接把原因显示给用户，避免“以为在用 Opus”。
+  ai_chat:
+    model: opus_5_5
+    fallback: none
+
+  # 脚本生成（脚本生成器 + 脚本工作台的正文生成）
+  script_generation:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 脚本改稿（脚本工作台：改某一段 / 在底稿上改 / 编导助手改稿）
+  script_rewrite:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 创作方向推荐（脚本工作台：推荐 3 个方向）
+  script_direction_recommendation:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 脚本问答（脚本工作台「只问不改」）
+  script_qa:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 参考素材分析（视频逐字稿 / 参考文案 / 产品文档的要点提取）
+  script_analysis:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 选题生成
+  topic_generation:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 自然流采访提纲
+  interview_generation:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 拆片分析（爆款结构拆解）
+  deconstruction_analysis:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 剪辑建议
+  editing_plan:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 链接拆片后的原创仿写
+  link_deconstruction_rewrite:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 评论洞察（拆片页 / 评论模块）
+  comment_insight:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 抖音评论洞察（脚本工作台用的抖音评论分析）
+  douyin_comment_insight:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # AI 工作流（产品洞察 / 选题 / 脚本 / 复盘等动作）
+  workflow_ai:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 产品资料结构化（Word / 文档 → 产品档案）
+  product_document_structure:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # Skill 安装自检（验证 Skill 指令能被模型执行）
+  skill_verify:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 营销意图理解（把用户原话解析成结构化的营销意图）
+  marketing_intent:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 营销策略层（选策略、定主线）
+  marketing_strategy:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 营销图文案编排（画面文案、标题、CTA）
+  marketing_creative_plan:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 营销复盘（数据回填后的结论与下一步）
+  marketing_review:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 图像任务的意图理解与方案生成（生图前的文本编排）
+  image_task_planning:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 生图卖点转化卡兜底提炼（营销引擎记录缺失时才调用，主路径零调用）
+  commerce_selling_point_cards:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 图像任务里的对话（任务级聊天）
+  commerce_chat:
+    model: opus_5_5
+    fallback: deepseek_v4_flash
+
+  # 爆款复刻：台词文案适配（按需求继续走 DeepSeek）
+  replica_dialogue_adaptation:
+    model: deepseek_v4_flash
+    fallback: none
+
+  # 爆款复刻：提示词润色
+  replica_prompt_refine:
+    model: deepseek_v4_flash
+    fallback: none
+
+  # 爆款复刻：模块内 AI 对话
+  replica_chat:
+    model: deepseek_v4_flash
+    fallback: none
+
+  # 爆款复刻：提示词发布前自检
+  replica_self_check:
+    model: deepseek_v4_flash
+    fallback: none
+
+  # ======================= 视觉理解 =======================
+
+  # 产品图 / 竞品图 / 参考图理解（长图拆解、画面分析）
+  product_image_understanding:
+    capability: vision
+    model: doubao_vision
+
+  # 生图链路：画面质检与排版核对
+  commerce_image_quality_check:
+    capability: vision
+    model: doubao_vision
+
+  # 爆款复刻：视频画面理解（逐帧分析）
+  video_understanding:
+    capability: vision
+    model: doubao_vision
+
+  # ======================= 语音转写 =======================
+
+  # 语音转写（抖音视频 / 直播录音 → 逐字稿）
+  speech_to_text:
+    capability: speech_to_text
+    model: doubao_asr
+
+  # ======================= 生图 =======================
+
+  # AI 生图默认模型。
+  # - 用户在界面上明确选了模型 → 以用户选择为准（这里只是默认）。
+  # - 用户选「自动推荐」→ 先试 model，没配好连接再依次试 fallback_models。
+  image_generation:
+    capability: image_generation
+    model: seedream_5_pro
+    fallback_models:
+      - gpt_image_2_5
+      - gpt_image_2
+    # 修图类任务（retouch）沿用现在的偏好：先试 GPT Image 2
+    retouch_models:
+      - gpt_image_2
+      - seedream_5_pro
+      - gpt_image_2_5

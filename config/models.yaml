@@ -1,0 +1,142 @@
+# ============================================================================
+# 模型注册表（models.yaml）
+#
+# 这里回答：**“这个模型到底是谁、通过哪个 Provider、用哪个环境变量连接”。**
+# 日常换模型不用改这里；只有要接入**新模型 / 新 Provider** 时才动。
+#
+# 规则：
+# 1. 这里只写环境变量**名称**，绝对不写 Key 的真实值（Key 只放 .env.local）。
+# 2. alias（上面那层的 key）是人看的名字，例如 opus_5_5；真正的模型 ID 写在 model_id。
+# 3. 想换某个功能用哪个模型 → 改 config/model-routing.yaml，不要改这个文件。
+# ============================================================================
+
+providers:
+
+  # ---------- 文本 ----------
+
+  # DeepSeek（OpenAI 兼容协议）
+  deepseek:
+    label: DeepSeek
+    protocol: openai_compatible
+    base_url: https://api.deepseek.com
+    base_url_env: DEEPSEEK_BASE_URL
+    api_key_env: DEEPSEEK_API_KEY
+
+  # 中转站上的 Claude（Anthropic Messages 协议，不是 OpenAI 协议）
+  teamorouter_claude:
+    label: TeamoRouter（Claude 中转站）
+    protocol: anthropic_compatible
+    base_url: https://api.teamorouter.cn
+    base_url_env: TEAMOROUTER_BASE_URL
+    api_key_env: TEAMOROUTER_API_KEY
+
+  # 火山方舟 / 豆包（OpenAI 兼容协议）：文本、视觉理解、语音转写
+  ark:
+    label: 火山方舟（豆包）
+    protocol: openai_compatible
+    base_url: https://ark.cn-beijing.volces.com/api/v3
+    base_url_env: ARK_BASE_URL
+    api_key_env: ARK_API_KEY
+    api_key_fallback_env: DOUBAO_API_KEY
+
+  # OpenAI 官方（OpenAI 兼容协议）
+  openai:
+    label: OpenAI
+    protocol: openai_compatible
+    base_url: https://api.openai.com/v1
+    base_url_env: OPENAI_BASE_URL
+    api_key_env: OPENAI_API_KEY
+
+  # ---------- 生图 ----------
+  # 生图连接可以在「系统设置 → 生图模型」里单独配置；
+  # 如果那里配了值，以界面配置为准；没配才用下面的环境变量。
+  # connection_store 对应系统设置里的 Provider 名称（seedream / openai / openai_v25）。
+
+  image_seedream:
+    label: 豆包 Seedream（生图）
+    protocol: image_generation
+    base_url: https://ark.cn-beijing.volces.com/api/v3
+    base_url_env: COMMERCE_SEEDREAM_BASE_URL
+    api_key_env: COMMERCE_SEEDREAM_API_KEY
+    api_key_fallback_env: ARK_API_KEY
+    connection_store: seedream
+
+  image_openai:
+    label: OpenAI 生图
+    protocol: image_generation
+    base_url: https://api.openai.com/v1
+    base_url_env: COMMERCE_OPENAI_BASE_URL
+    api_key_env: COMMERCE_OPENAI_API_KEY
+    api_key_fallback_env: OPENAI_API_KEY
+    connection_store: openai
+
+  image_openai_v25:
+    label: OriginGateway GPT Image 2.5
+    protocol: image_generation
+    base_url: https://origingateway.com/v1
+    base_url_env: ORIGIN_GATEWAY_BASE_URL
+    api_key_env: ORIGIN_GATEWAY_API_KEY
+    connection_store: openai_v25
+
+
+models:
+
+  # ---------- 文本 ----------
+
+  opus_5_5:
+    label: Claude Opus 5.5
+    provider: teamorouter_claude
+    model_id: claude-opus-5-5
+    capabilities: [text, vision, structured_output]
+    default_timeout_ms: 300000
+
+  deepseek_v4_flash:
+    label: DeepSeek V4 Flash
+    provider: deepseek
+    model_id: deepseek-v4-flash
+    capabilities: [text, structured_output]
+    default_timeout_ms: 180000
+
+  # ---------- 视觉理解 ----------
+
+  doubao_vision:
+    label: 豆包视觉理解（Seed 2.0 Lite）
+    provider: ark
+    model_id: doubao-seed-2-0-lite-260428
+    capabilities: [text, vision, structured_output]
+    default_timeout_ms: 240000
+
+  # ---------- 语音转写 ----------
+
+  doubao_asr:
+    label: 豆包语音转写（Seed 2.0 Lite 音频输入）
+    provider: ark
+    model_id: doubao-seed-2-0-lite-260428
+    capabilities: [speech_to_text]
+    default_timeout_ms: 300000
+
+  # ---------- 生图 ----------
+
+  seedream_5_pro:
+    label: 豆包 Seedream 5.0 Pro
+    provider: image_seedream
+    model_id: doubao-seedream-5-0-pro-260628
+    capabilities: [image_generation]
+
+  seedream_5:
+    label: 豆包 Seedream 5.0
+    provider: image_seedream
+    model_id: doubao-seedream-5-0-260128
+    capabilities: [image_generation]
+
+  gpt_image_2_5:
+    label: GPT Image 2.5（Sunburst，较慢）
+    provider: image_openai_v25
+    model_id: gpt-image-2.5-sunburst-4k
+    capabilities: [image_generation]
+
+  gpt_image_2:
+    label: GPT Image 2
+    provider: image_openai
+    model_id: gpt-image-2
+    capabilities: [image_generation]

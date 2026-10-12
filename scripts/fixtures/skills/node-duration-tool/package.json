@@ -1,0 +1,10 @@
+{
+  "name": "node-duration-tool",
+  "version": "1.0.1",
+  "private": true,
+  "type": "module",
+  "main": "index.mjs",
+  "dependencies": {
+    "ms": "2.1.3"
+  }
+}

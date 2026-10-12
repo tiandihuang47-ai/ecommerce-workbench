@@ -1,0 +1,271 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 「墨与纸」第二轮：去灰提神——冷灰画布 + 纯白卡片 + 清爽蓝绿点缀 + 极轻阴影 */
+    --background: 220 14% 97%;
+    --foreground: 224 18% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 18% 10%;
+    --primary: 224 18% 10%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 224 18% 12%;
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 9% 42%;
+    --accent: 192 80% 34%;
+    --accent-foreground: 0 0% 100%;
+    --brand: 224 18% 10%;
+    --brand-foreground: 0 0% 100%;
+    --destructive: 0 62% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 87%;
+    --ring: 192 80% 34%;
+    --sidebar: 220 14% 97%;
+
+    /* 生图界面视觉令牌（亮色） */
+    --ui-brand: #17181C;
+    --ui-brand-hover: #2E3138;
+    --ui-brand-soft: rgba(23, 24, 28, 0.05);
+    --ui-brand-ring: rgba(17, 148, 176, 0.32);
+    --ui-canvas: #F6F7F9;
+    --ui-surface: #FFFFFF;
+    --ui-surface-2: #F1F3F7;
+    --ui-line: rgba(15, 23, 42, 0.1);
+    --ui-line-strong: rgba(15, 23, 42, 0.18);
+    --ui-ink-1: #16181D;
+    --ui-ink-2: #4D5566;
+    --ui-ink-3: #8A90A0;
+    --ui-ok: #2E7D5B;
+    --ui-warn: #B4700F;
+    --ui-danger: #D93A3F;
+    --ui-info: #2F6FE0;
+    --ui-warn-soft: rgba(180, 112, 15, 0.1);
+    --ui-danger-soft: rgba(217, 58, 63, 0.08);
+    --ui-info-soft: rgba(47, 111, 224, 0.09);
+    --ui-ok-soft: rgba(46, 125, 91, 0.1);
+  }
+
+  .dark {
+    --background: 224 16% 8%;
+    --foreground: 220 14% 95%;
+    --card: 224 14% 11%;
+    --card-foreground: 220 14% 95%;
+    --primary: 220 14% 95%;
+    --primary-foreground: 224 16% 9%;
+    --secondary: 224 12% 16%;
+    --secondary-foreground: 220 14% 95%;
+    --muted: 224 12% 16%;
+    --muted-foreground: 220 10% 64%;
+    --accent: 190 75% 55%;
+    --accent-foreground: 224 16% 9%;
+    --brand: 220 14% 95%;
+    --brand-foreground: 224 16% 9%;
+    --destructive: 0 60% 52%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 224 10% 18%;
+    --input: 224 10% 16%;
+    --ring: 190 75% 55%;
+    --sidebar: 224 16% 8%;
+
+    /* 生图界面视觉令牌（暗色） */
+    --ui-brand: #F2F3F5;
+    --ui-brand-hover: #FFFFFF;
+    --ui-brand-soft: rgba(242, 243, 245, 0.1);
+    --ui-brand-ring: rgba(64, 190, 215, 0.35);
+    --ui-canvas: #101216;
+    --ui-surface: #16181D;
+    --ui-surface-2: #1D2026;
+    --ui-line: rgba(255, 255, 255, 0.08);
+    --ui-line-strong: rgba(255, 255, 255, 0.16);
+    --ui-ink-1: #EDEEF2;
+    --ui-ink-2: #B4B9C4;
+    --ui-ink-3: #878D99;
+    --ui-ok: #2E9E6B;
+    --ui-warn: #E0A040;
+    --ui-danger: #E5484D;
+    --ui-info: #5B9BFF;
+    --ui-warn-soft: rgba(224, 160, 64, 0.12);
+    --ui-danger-soft: rgba(229, 72, 77, 0.12);
+    --ui-info-soft: rgba(91, 155, 255, 0.12);
+    --ui-ok-soft: rgba(46, 158, 107, 0.14);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+      "PingFang SC", "Microsoft YaHei", sans-serif;
+    letter-spacing: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.015em;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  ::selection {
+    background: hsl(192 80% 34% / 0.14);
+  }
+
+  .dark ::selection {
+    background: hsl(190 75% 55% / 0.28);
+  }
+}
+
+@layer utilities {
+  .soft-panel {
+    @apply rounded-xl border border-border bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04),0_2px_8px_rgba(15,23,42,0.03)] dark:shadow-none;
+  }
+
+  .soft-panel-hover {
+    @apply transition-all duration-150 hover:-translate-y-px hover:border-input hover:shadow-[0_6px_20px_rgba(15,23,42,0.08)] dark:hover:border-white/15 dark:hover:shadow-none;
+  }
+
+  .work-surface {
+    @apply rounded-xl border border-border bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04),0_2px_8px_rgba(15,23,42,0.03)] dark:shadow-none;
+  }
+
+  .editor-strip {
+    @apply border-l-2 border-l-slate-300/70 dark:border-l-white/10;
+  }
+
+  .muted-grid {
+    background-image:
+      linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+  }
+
+  .scrollbar-subtle {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .desktop-page {
+    @apply min-h-[calc(100vh-4rem)];
+  }
+
+  .two-pane-grid {
+    @apply grid min-h-0 gap-5 xl:grid-cols-[minmax(360px,440px)_minmax(0,1fr)] xl:items-start;
+  }
+
+  .pane-scroll {
+    @apply min-h-0 overflow-y-auto pr-1 pb-3 scrollbar-subtle xl:max-h-[calc(100vh-7.25rem)];
+  }
+
+  .doc-section {
+    @apply rounded-xl border border-border bg-white/60 dark:bg-white/[0.03];
+  }
+
+  /* 生图界面：动效令牌与骨架 */
+  .ui-shell {
+    --dur-instant: 120ms;
+    --dur-fast: 180ms;
+    --dur-base: 240ms;
+    --dur-slow: 400ms;
+    --ui-ease-in: cubic-bezier(0.22, 1, 0.36, 1);
+    --ui-ease-out: cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  .anim-fade-up {
+    animation: ui-fade-up var(--dur-base, 240ms) var(--ui-ease-in, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  .anim-fade-in {
+    animation: ui-fade-in var(--dur-slow, 400ms) var(--ui-ease-in, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  .anim-pop-in {
+    animation: ui-pop-in var(--dur-fast, 180ms) var(--ui-ease-in, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--ui-surface-2);
+  }
+
+  .skeleton-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, var(--ui-line-strong), transparent);
+    animation: ui-shimmer 1.6s linear infinite;
+  }
+
+  @keyframes ui-fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ui-fade-in {
+    from { opacity: 0; transform: scale(1.02); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes ui-pop-in {
+    from { opacity: 0; transform: translateY(4px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes ui-shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  /* AI 生图：作用域字体与模式卡浮层（只影响 image-generator） */
+  .ig-root {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", sans-serif;
+    letter-spacing: -0.005em;
+  }
+
+  .ig-float-a {
+    animation: ig-float-a 9s ease-in-out infinite;
+  }
+
+  .ig-float-b {
+    animation: ig-float-b 11s ease-in-out infinite;
+  }
+
+  @keyframes ig-float-a {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-6px) rotate(-4deg); }
+  }
+
+  @keyframes ig-float-b {
+    0%, 100% { transform: translateY(0) rotate(4deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ig-float-a,
+    .ig-float-b {
+      animation: none;
+    }
+
+    .anim-fade-up,
+    .anim-fade-in,
+    .anim-pop-in {
+      animation: ui-fade-in 120ms linear both;
+    }
+
+    .skeleton-shimmer::after {
+      animation: none;
+    }
+  }
+}
