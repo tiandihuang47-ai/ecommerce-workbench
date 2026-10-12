@@ -55,7 +55,7 @@ async function readGroup(group) {
 function parseEntry(raw, file, group) {
   const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
   if (!match) throw new Error("src/marketing/" + group + "/" + file + " 缺少 YAML 头信息。");
-  const meta = parseYaml(match[1]) || {};
+  const meta = parseYaml(match[1].replace(/\r\n?/g, "\n")) || {};
   if (!meta || typeof meta !== "object" || Array.isArray(meta)) throw new Error("src/marketing/" + group + "/" + file + " 的 YAML 头信息无效。");
   const id = String(meta.id || "").trim();
   if (!id) throw new Error("src/marketing/" + group + "/" + file + " 缺少 id。");
