@@ -16,7 +16,7 @@ export default function SetupPage() {
 
   useEffect(() => {
     fetchAuthState().then((state) => {
-      if (!state.authEnabled) {
+      if (!state.authEnabled || state.localAccess) {
         router.replace("/");
         return;
       }

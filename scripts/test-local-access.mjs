@@ -31,11 +31,11 @@ async function stop() {
   current.kill('SIGTERM');
   await exited;
 }
-async function start(username = '', desktop = false) {
+async function start(username = '', desktop = false, requireLogin = false) {
   await stop();
   log = '';
   server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '-H', '127.0.0.1', '-p', String(port)], {
-    env: { ...process.env, NODE_ENV: 'production', DIRECTOR_RUNTIME_DIR: root, COMMERCE_IMAGE_DATA_DIR: path.join(root, 'commerce-image'), DIRECTOR_LOCAL_ACCESS_USERNAME: username, DIRECTOR_WEB_AUTH_DISABLED: desktop ? '1' : '0' },
+    env: { ...process.env, NODE_ENV: 'production', DIRECTOR_RUNTIME_DIR: root, COMMERCE_IMAGE_DATA_DIR: path.join(root, 'commerce-image'), DIRECTOR_LOCAL_ACCESS_USERNAME: username, DIRECTOR_WEB_AUTH_DISABLED: desktop ? '1' : '0', DIRECTOR_REQUIRE_LOGIN: requireLogin ? '1' : '0' },
     stdio: ['ignore', 'pipe', 'pipe']
   });
   server.stdout.on('data', (d) => { log += d; });
@@ -121,11 +121,57 @@ try {
   await check('Missing account fails closed', async () => { assert.equal((await me()).user, null); });
   await start('other_user');
   await check('Non-admin account is not silently promoted', async () => { assert.equal((await me()).user, null); });
-  await start();
-  await check('Regular web authentication is preserved when local mode is unconfigured', async () => {
+  await start('', false, true);
+  await check('Explicit login mode preserves regular web authentication', async () => {
     assert.equal((await me()).user, null);
     assert.equal((await fetch(base, { redirect: 'manual' })).status, 307);
     assert.equal((await fetch(`${base}/api/commerce-image/tasks`)).status, 401);
+  });
+  await start();
+  await check('Default local mode reuses the existing owner without an environment setting', async () => {
+    assert.equal((await me()).user.id, 'u_local_owner');
+    assert.equal((await (await fetch(`${base}/api/storage/history`)).json()).value, 'existing owner history');
+  });
+  users[0].status = 'disabled'; await writeFile(usersFile, JSON.stringify(users), { mode: 0o600 });
+  await check('Default mode never promotes an existing non-admin or disabled account', async () => {
+    assert.equal((await me()).user, null);
+  });
+  await rm(usersFile);
+  await start();
+  await check('Fresh install opens directly without creating a username, password or account database', async () => {
+    const states = await Promise.all(Array.from({ length: 8 }, () => me()));
+    for (const state of states) {
+      assert.equal(state.localAccess, true); assert.equal(state.initialized, true);
+      assert.equal(state.user.id, 'u_local_workspace'); assert.equal('passwordHash' in state.user, false);
+    }
+    await assert.rejects(readFile(usersFile), { code: 'ENOENT' });
+    for (const url of ['/', '/script-generator', '/settings']) assert.equal((await fetch(base + url, { redirect: 'manual' })).status, 200);
+    for (const url of ['/login', '/setup']) {
+      const r = await fetch(base + url, { redirect: 'manual' });
+      assert.equal(r.status, 307); assert.equal(new URL(r.headers.get('location')).pathname, '/');
+    }
+  });
+  await check('Fresh local workspace persists edits with a stable storage owner', async () => {
+    const r = await fetch(`${base}/api/storage/new-install-history`, { method: 'PUT', headers: { origin: base }, body: 'fresh local content' });
+    assert.equal(r.status, 200);
+  });
+  await start();
+  await check('Fresh workspace keeps its data after restart without logging in', async () => {
+    assert.equal((await me()).user.id, 'u_local_workspace');
+    assert.equal((await (await fetch(`${base}/api/storage/new-install-history`)).json()).value, 'fresh local content');
+    await assert.rejects(readFile(usersFile), { code: 'ENOENT' });
+  });
+  await check('Default local workspace rejects foreign Host and cross-site access', async () => {
+    for (const host of ['example.com', 'localhost.evil.example', '192.168.1.232:4321']) assert.equal((await me({ host })).user, null);
+    assert.equal((await me({ origin: 'https://evil.example' })).user, null);
+    const r = await fetch(`${base}/api/storage/new-install-history`, { method: 'PUT', headers: { origin: 'https://evil.example' }, body: 'overwrite' });
+    assert.equal(r.status, 401);
+    assert.equal((await (await fetch(`${base}/api/storage/new-install-history`)).json()).value, 'fresh local content');
+  });
+  await start('', false, true);
+  await check('Opt-in login mode requires initialization on a fresh install', async () => {
+    const state = await me(); assert.equal(state.user, null); assert.equal(state.initialized, false);
+    assert.equal((await fetch(base, { redirect: 'manual' })).status, 307);
   });
   await start('local_owner', true);
   await check('Desktop mode remains unchanged', async () => { const s = await me(); assert.equal(s.authEnabled, false); assert.equal(s.user, null); });

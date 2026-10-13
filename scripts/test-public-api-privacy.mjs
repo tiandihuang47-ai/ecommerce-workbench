@@ -44,7 +44,7 @@ async function start(mode = "web") {
   await stop();
   log = "";
   server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "-H", "127.0.0.1", "-p", "4328"], {
-    env: { ...process.env, NODE_ENV: "production", DIRECTOR_RUNTIME_DIR: root, COMMERCE_IMAGE_DATA_DIR: path.join(root, "commerce-image"), DIRECTOR_WEB_AUTH_DISABLED: mode === "desktop" ? "1" : "0", DIRECTOR_LOCAL_ACCESS_USERNAME: mode === "local" ? users[0].username : "" },
+    env: { ...process.env, NODE_ENV: "production", DIRECTOR_RUNTIME_DIR: root, COMMERCE_IMAGE_DATA_DIR: path.join(root, "commerce-image"), DIRECTOR_WEB_AUTH_DISABLED: mode === "desktop" ? "1" : "0", DIRECTOR_LOCAL_ACCESS_USERNAME: mode === "local" ? users[0].username : "", DIRECTOR_REQUIRE_LOGIN: mode === "local" ? "0" : "1" },
     stdio: ["ignore", "pipe", "pipe"]
   });
   server.stdout.on("data", (d) => { log += d; });

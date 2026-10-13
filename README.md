@@ -4,7 +4,9 @@
 
 ## 本地启动
 
-安装 Node.js 22.12.0 或更高版本，执行 `npm ci`，然后执行 `npm run dev -- --hostname 127.0.0.1 --port 3010`，访问 http://localhost:3010 。首次启动按页面提示设置管理员。API 可以在设置页填写；需要环境变量时，把 `.env.example` 复制成 `.env.local`，只在本机填写。
+安装 Node.js 22.12.0 或更高版本，执行 `npm ci`，然后执行 `npm run dev -- --hostname 127.0.0.1 --port 3010`，访问 http://localhost:3010 。默认在自己电脑上直接进入工作台，无需创建用户名或密码；旧 `/login`、`/setup` 地址会返回首页。API 可以在设置页填写；需要环境变量时，把 `.env.example` 复制成 `.env.local`，只在本机填写。
+
+新工作区使用本机内容目录；已有账号时继续使用用户列表中第一个启用的管理员工作区，也可以通过 `DIRECTOR_LOCAL_ACCESS_USERNAME` 指定已有管理员。需要账号登录时，在 `.env.local` 设置 `DIRECTOR_REQUIRE_LOGIN=1` 后重启；共享或公开部署须使用登录保护，详见 [网页版手册](docs/WEB_GUIDE.md)。
 
 模型注册在 `config/models.yaml`，功能路由在 `config/model-routing.yaml`。模型访问权限、付费及第三方连接由使用者自行配置；没有密钥的能力不可用。
 

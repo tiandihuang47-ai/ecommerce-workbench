@@ -4,7 +4,7 @@
   "private": true,
   "main": "electron/main.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --hostname 127.0.0.1",
     "predev": "node scripts/build-marketing-config.mjs",
     "marketing:build": "node scripts/build-marketing-config.mjs",
     "prebuild": "node scripts/build-marketing-config.mjs",
@@ -26,7 +26,7 @@
     "test:commerce-image": "node scripts/test-commerce-image.mjs",
     "test:marketing-engine": "node scripts/test-marketing-engine.mjs",
     "lint": "tsc --noEmit",
-    "start": "next start",
+    "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -14,7 +14,7 @@ function LoginForm() {
 
   useEffect(() => {
     fetchAuthState().then((state) => {
-      if (!state.authEnabled) {
+      if (!state.authEnabled || state.localAccess) {
         window.location.replace("/");
         return;
       }

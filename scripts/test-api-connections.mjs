@@ -51,7 +51,7 @@ async function start(username = 'owner') {
   const catalog = parse(await readFile('config/models.yaml', 'utf8'));
   const keys = Object.fromEntries(Object.values(catalog.providers).flatMap((p) => [p.api_key_env, p.api_key_fallback_env].filter(Boolean).map((k) => [k, ''])));
   child = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '-H', '127.0.0.1', '-p', String(port)], {
-    env: { ...process.env, ...keys, NODE_ENV: 'production', DIRECTOR_RUNTIME_DIR: root, COMMERCE_IMAGE_DATA_DIR: path.join(root, 'commerce-image'), MODEL_CONFIG_DIR: path.join(root, 'config'), MODEL_ROUTER_PROFILE_DIR: path.join(root, 'model-router'), DIRECTOR_WEB_AUTH_DISABLED: '0', DIRECTOR_LOCAL_ACCESS_USERNAME: username }, stdio: ['ignore', 'pipe', 'pipe']
+    env: { ...process.env, ...keys, NODE_ENV: 'production', DIRECTOR_RUNTIME_DIR: root, COMMERCE_IMAGE_DATA_DIR: path.join(root, 'commerce-image'), MODEL_CONFIG_DIR: path.join(root, 'config'), MODEL_ROUTER_PROFILE_DIR: path.join(root, 'model-router'), DIRECTOR_WEB_AUTH_DISABLED: '0', DIRECTOR_LOCAL_ACCESS_USERNAME: username, DIRECTOR_REQUIRE_LOGIN: username ? '0' : '1' }, stdio: ['ignore', 'pipe', 'pipe']
   });
   child.stdout.on('data', (b) => { log += b; }); child.stderr.on('data', (b) => { log += b; });
   for (let i = 0; i < 100; i++) {

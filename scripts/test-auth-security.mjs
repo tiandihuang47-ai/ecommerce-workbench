@@ -69,7 +69,7 @@ async function main() {
 
   const server = spawn("npx", ["next", "start", "-p", String(PORT)], {
     cwd: process.cwd(),
-    env: { ...process.env, DIRECTOR_RUNTIME_DIR: runtimeDir, NODE_ENV: "production" },
+    env: { ...process.env, DIRECTOR_RUNTIME_DIR: runtimeDir, DIRECTOR_REQUIRE_LOGIN: "1", DIRECTOR_LOCAL_ACCESS_USERNAME: "", DIRECTOR_WEB_AUTH_DISABLED: "0", NODE_ENV: "production" },
     stdio: ["ignore", "pipe", "pipe"],
     detached: true
   });
