@@ -4,7 +4,7 @@
 
 ## 本地启动
 
-安装 Node.js 22，执行 `npm ci`，然后执行 `npm run dev -- --hostname 127.0.0.1 --port 3010`，访问 http://localhost:3010 。首次启动按页面提示设置管理员。API 可以在设置页填写；需要环境变量时，把 `.env.example` 复制成 `.env.local`，只在本机填写。
+安装 Node.js 22.12.0 或更高版本，执行 `npm ci`，然后执行 `npm run dev -- --hostname 127.0.0.1 --port 3010`，访问 http://localhost:3010 。首次启动按页面提示设置管理员。API 可以在设置页填写；需要环境变量时，把 `.env.example` 复制成 `.env.local`，只在本机填写。
 
 模型注册在 `config/models.yaml`，功能路由在 `config/model-routing.yaml`。模型访问权限、付费及第三方连接由使用者自行配置；没有密钥的能力不可用。
 
@@ -34,4 +34,4 @@
 
 本版本已更新 Next.js、Sharp、Mammoth 等兼容依赖，并将 Next.js 使用的 PostCSS 固定到 8.5.29。仍有 `sprintf-js` 的中危拒绝服务公告（通过 Mammoth / argparse 间接引入），目前没有已发布的修复版本；不应把此版本视为已完成公网部署安全审计的版本。
 
-2026-10-13 复查还发现开发工具和桌面依赖存在高危/严重公告；本次补全 API 权限检查没有升级这些依赖。导入可执行 Skill、配置外部 API 及部署前请阅读 [安全说明](SECURITY.md)。
+2026-10-13 后续安全更新已将 Electron 更新到 42.11.12、tar 更新到 7.5.22，并更新兼容的开发/打包依赖；CSS 解析器固定到 7.1.6，构建样式与升级前一致。npm 官方审计的严重告警为 0，仍有 5 个高危、10 个中危受影响包项，分别来自尚无修复版本的 braces 与 sprintf-js 依赖链；网页生产依赖仍为 3 个中危包项。桌面打包通过不等于已签名、公证或适合公网部署。导入可执行 Skill、配置外部 API 及部署前请阅读 [安全说明](SECURITY.md)。

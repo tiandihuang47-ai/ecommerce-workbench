@@ -18,3 +18,7 @@
 2026-10-13 补全了共享资料读取接口的身份检查，并将 Skill 清理、全局 AI 理解配置写入和本机文件诊断限制为管理员；本机直接访问与桌面模式保持兼容。生产构建后可执行 `node scripts/test-public-api-privacy.mjs`，使用临时数据验证权限边界，不调用付费 API。
 
 依赖检查须同时查看 `npm audit --registry=https://registry.npmjs.org` 和 `npm audit --omit=dev --registry=https://registry.npmjs.org`。桌面运行时 Electron 虽登记在 `devDependencies`，仍影响桌面版本，不能用“生产依赖没有高危”代替桌面安全结论。不要直接执行 `npm audit fix --force`，它可能进行破坏性升级或降级。正式公网/多人部署还需要 HTTPS、会话 Cookie 安全配置、请求和上传限制、出站网络限制及独立部署测试。
+
+2026-10-13 兼容安全更新后，全量审计从 1 严重、12 高危、12 中危降至 **0 严重、5 高危、10 中危**；生产依赖为 0 严重、0 高危、3 中危。Electron 42.11.12 和 tar 7.5.22 已不在当前告警列表中。剩余包项来自两个上游公告：[braces 嵌套模式拒绝服务](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)、[sprintf-js 精度参数拒绝服务](https://github.com/advisories/GHSA-hp3w-g68c-fv3c)，公告当时均无已发布补丁。不要将受影响包项数理解为独立漏洞数量或已发生的泄露。
+
+为移除 CSS 解析器公告，`postcss-selector-parser` 固定为 7.1.6；生产构建、桌面打包及实际渲染验证，并核对编译 CSS 与升级前完全一致。此更新没有迁移 Tailwind 4，也没有降级 Mammoth 或打包器。复现依赖版本应使用已提交锁文件执行 `npm ci`；当前 Electron 下载工具要求 Node.js 22.12.0 或更高版本。
