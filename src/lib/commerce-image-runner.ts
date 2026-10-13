@@ -1,5 +1,6 @@
+import { imageRegistryKeyForAlias } from "@/lib/commerce-image-config";
 import { randomUUID } from "node:crypto";
-import { findModel, resolveImageModelChain } from "@/lib/model-router";
+import { resolveImageModelChain } from "@/lib/model-router";
 import { readFile } from "node:fs/promises";
 import { executeCommerceImageAnalysis, isCommerceImageAnalysisRunning } from "@/lib/commerce-image-analysis";
 import { isCommerceChatGenerationRunning } from "@/lib/commerce-image-chat";
@@ -1223,7 +1224,7 @@ async function resolveTaskModel(task: CommerceImageTask): Promise<ResolvedCommer
 function preferredModels(kind: CommerceImageTaskKind): ResolvedCommerceImageModel[] {
   /* 自动推荐顺序来自 config/model-routing.yaml 的 image_generation（retouch 用 retouch_models）。 */
   const chain = resolveImageModelChain(kind).modelAliasChain
-    .map((alias) => findModel(alias).modelId)
+    .map(imageRegistryKeyForAlias)
     .filter((modelId) => Boolean(commerceImageModelRegistry[modelId as ResolvedCommerceImageModel]));
   return chain as ResolvedCommerceImageModel[];
 }

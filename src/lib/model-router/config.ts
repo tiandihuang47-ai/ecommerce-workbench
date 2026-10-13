@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parse as parseYaml } from "yaml";
+import { configSignature, effectiveConfigDir, localConnectionKey, redactLocalSecrets } from "./profile-store";
 
 /**
  * Model Router · 配置层
@@ -25,6 +26,8 @@ export interface ProviderDef {
   apiKeyEnv?: string;
   apiKeyFallbackEnv?: string;
   connectionStore?: string;
+  imageAdapter?: "openai" | "seedream";
+  audioFormat?: "chat" | "transcriptions";
 }
 
 export interface ModelDef {
@@ -91,7 +94,7 @@ export class ModelRoutingError extends Error {
 }
 
 function configDir() {
-  return process.env.MODEL_CONFIG_DIR || path.join(process.cwd(), "config");
+  return effectiveConfigDir();
 }
 
 function readYamlFile(fileName: string): Record<string, unknown> {
@@ -127,15 +130,26 @@ function asNumber(value: unknown): number | undefined {
 
 let catalogCache: Catalog | null = null;
 let routeCache: RouteDef[] | null = null;
+let cachedSignature = "";
+
+function refreshConfig() {
+  const signature = configSignature();
+  if (signature !== cachedSignature) {
+    resetModelRouterCache();
+    cachedSignature = signature;
+  }
+}
 
 /** 清空缓存（测试 / 手工重载用）。 */
 export function resetModelRouterCache() {
   catalogCache = null;
   routeCache = null;
   DEFAULT_MODEL_ID.clear();
+  cachedSignature = "";
 }
 
 export function loadModelCatalog(): Catalog {
+  refreshConfig();
   if (catalogCache) return catalogCache;
   const doc = readYamlFile("models.yaml");
   const providers = Object.entries(asRecord(doc.providers)).map(([name, value]): ProviderDef => {
@@ -149,7 +163,9 @@ export function loadModelCatalog(): Catalog {
       baseUrlEnv: asString(record.base_url_env) || undefined,
       apiKeyEnv: asString(record.api_key_env) || undefined,
       apiKeyFallbackEnv: asString(record.api_key_fallback_env) || undefined,
-      connectionStore: asString(record.connection_store) || undefined
+      connectionStore: asString(record.connection_store) || undefined,
+      imageAdapter: record.image_adapter as ProviderDef["imageAdapter"],
+      audioFormat: record.audio_format as ProviderDef["audioFormat"]
     };
   });
   const models = Object.entries(asRecord(doc.models)).map(([alias, value]): ModelDef => {
@@ -170,6 +186,7 @@ export function loadModelCatalog(): Catalog {
 }
 
 export function loadRouteTable(): RouteDef[] {
+  refreshConfig();
   if (routeCache) return routeCache;
   const doc = readYamlFile("model-routing.yaml");
   const routesNode = asRecord(doc.routes);
@@ -212,16 +229,16 @@ export function findModel(alias: string): ModelDef {
   return model;
 }
 
-/** 解析 Provider 的连接信息：环境变量优先于默认值，Key 永远只来自环境变量。 */
+/** 解析 Provider 的连接信息：环境变量优先于默认地址；Key 来自私有本机连接或原环境变量。 */
 export function resolveProvider(provider: ProviderDef): ResolvedProvider {
   const baseUrl = (provider.baseUrlEnv ? process.env[provider.baseUrlEnv] : "") || provider.baseUrl;
   if (!baseUrl) {
     throw new ModelRoutingError(`Provider "${provider.name}" 缺少 base_url（config/models.yaml）。`);
   }
   const keyEnv = provider.apiKeyEnv || provider.apiKeyFallbackEnv || "";
-  const apiKey = (provider.apiKeyEnv ? process.env[provider.apiKeyEnv] : "")
+  const apiKey = localConnectionKey(provider.connectionStore) ?? ((provider.apiKeyEnv ? process.env[provider.apiKeyEnv] : "")
     || (provider.apiKeyFallbackEnv ? process.env[provider.apiKeyFallbackEnv] : "")
-    || "";
+    || "");
   return {
     name: provider.name,
     label: provider.label,
@@ -392,7 +409,7 @@ export function logModelCall(options: {
     `status=${options.status}`
   ];
   if (options.source) parts.push(`source=${options.source}`);
-  if (options.reason) parts.push(`reason=${options.reason.slice(0, 200)}`);
+  if (options.reason) parts.push(`reason=${redactLocalSecrets(options.reason).slice(0, 200)}`);
   const line = parts.join(" ");
   if (options.status === "success") console.info(line);
   else console.warn(line);

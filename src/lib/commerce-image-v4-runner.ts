@@ -1,8 +1,9 @@
+import { imageRegistryKeyForAlias } from "@/lib/commerce-image-config";
 import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { buildLogoTextBlock, CLEAN_BASE_IMAGE_RULE, sanitizeCommerceImageGeneratorPrompt } from "@/lib/commerce-image-marketing";
 import { commerceImageModelRegistry, resolveCommerceImageSize } from "@/lib/commerce-image-models";
-import { findModel, resolveImageModelChain } from "@/lib/model-router";
+import { resolveImageModelChain } from "@/lib/model-router";
 import {
   generateCommerceImage,
   isTransientCommerceImageError,
@@ -73,12 +74,10 @@ function resolveModel(task: CommerceImageTask): ResolvedCommerceImageModel {
   if (task.model !== "auto" && commerceImageModelRegistry[task.model as ResolvedCommerceImageModel]) return task.model as ResolvedCommerceImageModel;
   /* 用户没手选模型时，用 config/model-routing.yaml 的 image_generation 默认链。 */
   const fromRoute = resolveImageModelChain(task.kind).modelAliasChain
-    .map((alias) => findModel(alias).modelId)
+    .map(imageRegistryKeyForAlias)
     .find((modelId) => Boolean(commerceImageModelRegistry[modelId as ResolvedCommerceImageModel]));
   if (fromRoute) return fromRoute as ResolvedCommerceImageModel;
-  const available = Object.keys(commerceImageModelRegistry) as ResolvedCommerceImageModel[];
-  if (available.length) return available[0];
-  throw new Error("没有可用的图片生成模型。");
+  throw new Error("没有可用的图片生成模型，请在设置中选择生图 API。");
 }
 
 function compileV4PanelPrompt(

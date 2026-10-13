@@ -67,7 +67,7 @@ export default function SetupPage() {
           </div>
           <h1 className="text-xl font-semibold tracking-[-0.01em] text-foreground">初始化网页版</h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            第一次使用，先创建管理员账号。之后你在「管理后台」为同事开通账号。
+            第一次使用，先创建管理员账号，之后即可进入工作台。
           </p>
         </div>
 

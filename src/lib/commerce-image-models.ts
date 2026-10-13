@@ -12,13 +12,18 @@ export const commerceImageModelRegistry: Record<ResolvedCommerceImageModel, {
   id: ResolvedCommerceImageModel;
   label: string;
   shortLabel: string;
-  provider: "seedream" | "openai" | "openai_v25";
+  provider: "seedream" | "openai" | "openai_v25" | "configured";
   description: string;
   maxReferenceImages: number;
   lastVerifiedAt: string;
   /** Official quality/resolution tiers supported by this model. */
   qualityOptions: Array<{ value: CommerceImageQuality; label: string; description: string; sizeMultiplier: number }>;
 }> = {
+  configured: {
+    id: "configured", label: "我的默认生图模型", shortLabel: "我的生图模型", provider: "configured",
+    description: "使用设置中选择的生图 API 和模型", maxReferenceImages: 8, lastVerifiedAt: "",
+    qualityOptions: [{ value: "standard", label: "标准", description: "由已配置的模型生成", sizeMultiplier: 1 }, { value: "high", label: "高清", description: "由已配置的模型生成", sizeMultiplier: 1 }]
+  },
   "doubao-seedream-5-0-260128": {
     id: "doubao-seedream-5-0-260128",
     label: "豆包 Seedream 5.0（旗舰）",
@@ -84,7 +89,8 @@ export const commerceImageModelRegistry: Record<ResolvedCommerceImageModel, {
  * openai_v25 的 UI 键（gpt-image-2.5）与真实 Provider model_id（config/models.yaml）刻意分离：
  * 换中转站只改 models.yaml 的 model_id，UI 注册表键与界面保持不变。
  */
-export function commerceImageRegistryModelForProvider(provider: "seedream" | "openai" | "openai_v25"): ResolvedCommerceImageModel {
+export function commerceImageRegistryModelForProvider(provider: "seedream" | "openai" | "openai_v25" | "configured"): ResolvedCommerceImageModel {
+  if (provider === "configured") return "configured";
   if (provider === "openai_v25") return "gpt-image-2.5";
   if (provider === "openai") return "gpt-image-2";
   return "doubao-seedream-5-0-pro-260628";
@@ -267,7 +273,7 @@ export const COMMERCE_IMAGE_V25_LONG_EDGES: Record<CommerceImageQuality, number>
 export const COMMERCE_IMAGE_V25_ULTRA_LONG_EDGE = COMMERCE_IMAGE_V25_LONG_EDGES.ultra;
 
 export function commerceImageRequestSize(
-  provider: "seedream" | "openai" | "openai_v25",
+  provider: "seedream" | "openai" | "openai_v25" | "configured",
   size: CommerceImageSize,
   quality: CommerceImageQuality = "high"
 ): CommerceImageSize {

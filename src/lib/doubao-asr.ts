@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { resolveRoute } from "@/lib/model-router";
+import { resolveRoute, requestAudioByRoute } from "@/lib/model-router";
 import { mkdir, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -61,8 +61,8 @@ export function getAsrProviderStatus(): AsrProviderStatus {
     model: asrModel(),
     directModel: asrModel(),
     message: configured
-      ? `豆包语音转写已配置（${asrModel()}）。`
-      : "未配置火山方舟 API Key，请在 .env.local 中配置 ARK_API_KEY"
+      ? `语音转写已配置（${asrModel()}）。`
+      : "请在设置中添加语音转写 API 连接和模型"
   };
 }
 
@@ -207,41 +207,11 @@ async function transcribeSingleAudio(audioPath: string): Promise<AsrResult> {
   const format = ext === "wav" ? "wav" : "mp3";
 
   try {
-    const response = await fetch(`${arkBaseUrl()}/chat/completions`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: "把这段音频里的人声原样转写成中文文字。只输出转写结果本身，不要解释、不要总结、不要加标点以外的加工；听不清的地方用「听不清」占位。"
-              },
-              {
-                type: "input_audio",
-                input_audio: {
-                  // 必须是裸 base64：带 data: 前缀会被方舟判为参数非法。
-                  data: buffer.toString("base64"),
-                  format
-                }
-              }
-            ]
-          }
-        ],
-        temperature: 0,
-        max_tokens: 16000
-      })
-    });
+    const response = await requestAudioByRoute(buffer, format);
 
     const payload = await response.json().catch(() => ({})) as Record<string, unknown>;
     if (!response.ok) {
-      const raw = extractArkError(payload) || response.statusText;
+      const raw = (extractArkError(payload) || response.statusText).split(apiKey).join("[已隐藏]");
       const code = classifyAsrFailure(raw) || (response.status === 429 ? "RATE_LIMIT" : "");
       return {
         success: false,

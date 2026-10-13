@@ -2,8 +2,7 @@ import { denyIfUnauthenticated } from "@/lib/auth/guard";
 import { NextResponse } from "next/server";
 import { getDeepSeekRulesContext } from "@/lib/deepseek";
 import {
-  AI_CHAT_MODEL_ID,
-  AI_CHAT_PROVIDER_LABEL,
+  getAiChatConfig,
   AiChatError,
   buildAnthropicMessages,
   classifyThrown,
@@ -25,7 +24,7 @@ import type {
 /**
  * AI 对话接口。
  *
- * 模型绑定：**只走中转站 TeamoRouter 的 claude-opus-5-5**（Anthropic Messages 协议）。
+ * 模型和协议由中央路由 ai_chat 决定，支持 Anthropic 与 OpenAI 兼容连接。
  * 这里不再调用 DeepSeek —— 脚本 / 爆款复刻 / 生图 / ASR / 复盘等其他模块仍然各自使用原模型。
  * （本文件只从 @/lib/deepseek 复用「本地编导规则库」这一份纯数据，不发起任何 DeepSeek 请求。）
  */
@@ -85,6 +84,7 @@ const roleRuleTypes: Record<Exclude<AIChatAssistantKind, "general">, "script" | 
 };
 
 export async function POST(request: Request) {
+  const { AI_CHAT_MODEL_ID, AI_CHAT_PROVIDER_LABEL } = getAiChatConfig();
   const deny = await denyIfUnauthenticated(request);
   if (deny) return deny;
   try {
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
         {
           success: false,
           code: "missing_key",
-          message: "AI 对话模型还没有配置：缺少中转站 API Key（TEAMOROUTER_API_KEY）。",
+          message: "请在设置中添加自己的 API，并设为默认文字模型。",
           model: AI_CHAT_MODEL_ID
         },
         { status: 500 }
@@ -167,6 +167,7 @@ function streamCompletion(options: {
   toolRoutes: Record<string, string>;
   refNotices: RefNotice[];
 }) {
+  const { AI_CHAT_MODEL_ID, AI_CHAT_PROVIDER_LABEL } = getAiChatConfig();
   const encoder = new TextEncoder();
   const readable = new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -218,7 +219,7 @@ function streamCompletion(options: {
 
           if (result.toolUses.length === 0) {
             console.info(
-              `[MODEL_CALL] purpose=ai_chat model=${AI_CHAT_MODEL_ID} provider=teamorouter duration=${((Date.now() - startedAt) / 1000).toFixed(1)}s status=success source=opus`
+              `[MODEL_CALL] purpose=ai_chat model=${AI_CHAT_MODEL_ID} provider=${AI_CHAT_PROVIDER_LABEL} duration=${((Date.now() - startedAt) / 1000).toFixed(1)}s status=success source=route`
             );
             emit({ done: true, model: AI_CHAT_MODEL_ID });
             return;
@@ -245,13 +246,13 @@ function streamCompletion(options: {
         }
 
         console.info(
-          `[MODEL_CALL] purpose=ai_chat model=${AI_CHAT_MODEL_ID} provider=teamorouter duration=${((Date.now() - startedAt) / 1000).toFixed(1)}s status=success source=opus`
+          `[MODEL_CALL] purpose=ai_chat model=${AI_CHAT_MODEL_ID} provider=${AI_CHAT_PROVIDER_LABEL} duration=${((Date.now() - startedAt) / 1000).toFixed(1)}s status=success source=route`
         );
         emit({ done: true, model: AI_CHAT_MODEL_ID });
       } catch (error) {
         const classified = error instanceof AiChatError ? error : classifyThrown(error);
         console.warn(
-          `[MODEL_CALL] purpose=ai_chat model=${AI_CHAT_MODEL_ID} provider=teamorouter duration=${((Date.now() - startedAt) / 1000).toFixed(1)}s status=error code=${classified.code} reason=${classified.message.slice(0, 200)}`
+          `[MODEL_CALL] purpose=ai_chat model=${AI_CHAT_MODEL_ID} provider=${AI_CHAT_PROVIDER_LABEL} duration=${((Date.now() - startedAt) / 1000).toFixed(1)}s status=error code=${classified.code} reason=${classified.message.slice(0, 200)}`
         );
         emit({ error: classified.message, code: classified.code, hint: classified.hint });
       } finally {

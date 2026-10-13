@@ -14,6 +14,8 @@ export type AuthState = {
   loading: boolean;
   /** 桌面端为 false（无需登录）；网页端为 true */
   authEnabled: boolean;
+  /** 本机直接进入既有工作区，无需输入账号密码 */
+  localAccess?: boolean;
   /** 系统是否已有账号（决定首次进入是去初始化还是登录） */
   initialized: boolean;
   user: AuthUser | null;

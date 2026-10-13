@@ -6,6 +6,7 @@ export type CommerceImageTaskKind = "detail_page" | "douyin_post" | "xiaohongshu
 
 export type CommerceImageModel =
   | "auto"
+  | "configured"
   | "doubao-seedream-5-0-260128"
   | "doubao-seedream-5-0-pro-260628"
   | "gpt-image-2"
@@ -393,7 +394,7 @@ export interface CommerceImageStructuredError {
   category: "configuration" | "authorization" | "model_access" | "quota" | "validation" | "transient" | "content_policy" | "unknown";
   message: string;
   retryable: boolean;
-  provider?: "seedream" | "openai" | "openai_v25" | "text" | "vision";
+  provider?: "seedream" | "openai" | "openai_v25" | "configured" | "text" | "vision";
   requestId?: string;
 }
 
@@ -566,7 +567,7 @@ export interface CommerceProductVisualProfile {
 }
 
 export interface CommerceImageProviderStatus {
-  provider: "seedream" | "openai" | "openai_v25";
+  provider: "seedream" | "openai" | "openai_v25" | "configured";
   label: string;
   modelId: ResolvedCommerceImageModel;
   providerModelId: string;

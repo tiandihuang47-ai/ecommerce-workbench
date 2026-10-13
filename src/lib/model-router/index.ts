@@ -16,6 +16,7 @@ import {
 
 export * from "@/lib/model-router/config";
 export { maskSecrets } from "@/lib/model-router/adapters";
+export { streamOpenAiCompatibleChat } from "@/lib/model-router/adapters";
 export type { VisionContentBlock } from "@/lib/model-router/adapters";
 
 /**
@@ -214,3 +215,22 @@ export function describeRoute(routeKey: string) {
 }
 
 export type { ProtocolMessage };
+
+/** Both supported audio protocols use the same registered speech_to_text route. */
+export async function requestAudioByRoute(bytes: Uint8Array, format: "mp3" | "wav", signal?: AbortSignal) {
+  const route = resolveRoute("speech_to_text");
+  if (!route.provider.apiKey) throw new Error("请先在设置中配置语音转写模型。");
+  const provider = findProvider(findModel(route.modelAlias).provider);
+  if (route.provider.protocol !== "openai_compatible") throw new Error("语音转写需要 OpenAI 兼容接口。");
+  const transcription = provider.audioFormat === "transcriptions";
+  const form = new FormData();
+  form.set("model", route.modelId);
+  form.set("file", new Blob([Uint8Array.from(bytes).buffer], { type: format === "wav" ? "audio/wav" : "audio/mpeg" }), `audio.${format}`);
+  const response = await fetch(`${route.provider.baseUrl}/${transcription ? "audio/transcriptions" : "chat/completions"}`, {
+    method: "POST", redirect: "error",
+    headers: { Authorization: `Bearer ${route.provider.apiKey}`, ...(transcription ? {} : { "Content-Type": "application/json" }) },
+    body: transcription ? form : JSON.stringify({ model: route.modelId, messages: [{ role: "user", content: [{ type: "text", text: "请逐字转写音频中的人声，只输出原文；不要总结或解释。" }, { type: "input_audio", input_audio: { data: Buffer.from(bytes).toString("base64"), format } }] }], temperature: 0, max_tokens: 16000 }),
+    signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(route.timeoutMs)]) : AbortSignal.timeout(route.timeoutMs)
+  });
+  return response;
+}

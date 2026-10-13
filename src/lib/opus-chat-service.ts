@@ -1,36 +1,15 @@
-import { resolveRoute } from "@/lib/model-router";
+import { resolveRoute, streamOpenAiCompatibleChat } from "@/lib/model-router";
 
-/**
- * AiChatModelService —— 「AI 对话」模块专用的模型入口。
- *
- * 模块级模型绑定（不碰全局默认模型）：
- * - 走这里：/api/ai-chat（AI 对话页面）。
- * - 不走这里：脚本、爆款复刻、AI 生图、ASR、复盘 —— 继续使用各自原来的模型（DeepSeek / 豆包）。
- *
- * 中转站：TeamoRouter（**不是** Anthropic 官方 API）。
- * 协议：Anthropic Messages（POST /v1/messages）。
- * 复用现有配置，不新建第二套 Key：
- *   - Base URL / API Key / Model ID 全部由 config/models.yaml 中 ai_chat Route 指向的 Provider 决定
- *   - API Key 只读服务端环境变量，绝不下发前端
+/** AI 对话每次调用都读取中央 ai_chat Route，支持 OpenAI 与 Anthropic 文字协议。
+ * 设置页保存的私有 YAML 配置即时生效；已有 Skill 工具循环与业务数据保持不变。
+ * Key 仅在服务端解析，永不随模型状态返回页面。
  */
-
-/**
- * 「AI 对话」的模型配置全部来自中央模型路由的 ai_chat Route
- * （config/model-routing.yaml → config/models.yaml → Provider）。
- * 想换 AI 对话模型：改 config/model-routing.yaml 的 ai_chat.model，不要改这个文件。
- */
-const AI_CHAT_ROUTE = resolveRoute("ai_chat");
-
-export const AI_CHAT_MODEL_ID = AI_CHAT_ROUTE.modelId;
-export const AI_CHAT_BASE_URL = AI_CHAT_ROUTE.provider.baseUrl;
-export const AI_CHAT_PROVIDER_LABEL = AI_CHAT_ROUTE.provider.label;
-export const AI_CHAT_TIMEOUT_MS = AI_CHAT_ROUTE.timeoutMs;
-export const AI_CHAT_MAX_TOKENS = Number(process.env.AI_CHAT_MAX_TOKENS || 8192);
-export const AI_CHAT_PROVIDER_ENV = AI_CHAT_ROUTE.provider.apiKeyEnv;
-
-export function isAiChatConfigured() {
-  return Boolean(AI_CHAT_ROUTE.provider.apiKey);
+export function getAiChatConfig() {
+  const route = resolveRoute("ai_chat");
+  return { route, AI_CHAT_MODEL_ID: route.modelId, AI_CHAT_BASE_URL: route.provider.baseUrl, AI_CHAT_PROVIDER_LABEL: route.provider.label, AI_CHAT_TIMEOUT_MS: route.timeoutMs, AI_CHAT_PROVIDER_ENV: route.provider.apiKeyEnv };
 }
+export const AI_CHAT_MAX_TOKENS = Number(process.env.AI_CHAT_MAX_TOKENS || 8192);
+export function isAiChatConfigured() { return Boolean(resolveRoute("ai_chat").provider.apiKey); }
 
 /* ------------------------------------------------------------------ 类型 */
 
@@ -109,67 +88,70 @@ export function maskSecrets(value: string) {
     .replace(/["']?x-api-key["']?\s*[:=]\s*["'][^"']+["']/gi, "x-api-key=***");
 }
 
-/** HTTP 状态码 + 中转站返回体 → 可读的中文原因。 */
+/** HTTP 状态码 + API 服务商返回体 → 可读的中文原因。 */
 export function classifyHttpError(status: number, raw: string): AiChatError {
-  const body = maskSecrets(raw).slice(0, 400);
+  const { AI_CHAT_MODEL_ID } = getAiChatConfig();
+  const key = getAiChatConfig().route.provider.apiKey;
+  const body = maskSecrets(key ? raw.split(key).join("[已隐藏]") : raw).slice(0, 400);
   const lowered = raw.toLowerCase();
 
   if (status === 401 || status === 403) {
-    return new AiChatError("auth", "中转站拒绝了这次请求：API Key 无效、已过期或没有该模型权限。", {
+    return new AiChatError("auth", "API 服务商拒绝了这次请求：API Key 无效、已过期或没有该模型权限。", {
       status,
-      hint: "请检查 .env.local 里的 TEAMOROUTER_API_KEY 是否为当前有效的中转站 Key。"
+      hint: "请到设置中的 API 连接检查密钥和模型权限。"
     });
   }
 
   if (status === 404) {
-    return new AiChatError("model_not_found", `中转站没有找到模型「${AI_CHAT_MODEL_ID}」。`, {
+    return new AiChatError("model_not_found", `API 服务商没有找到模型「${AI_CHAT_MODEL_ID}」。`, {
       status,
-      hint: "请在中转站的模型列表中确认这个模型 ID 是否存在。"
+      hint: "请在API 服务商的模型列表中确认这个模型 ID 是否存在。"
     });
   }
 
   if (status === 402) {
-    return new AiChatError("insufficient_balance", "中转站余额不足或套餐已用尽。", {
+    return new AiChatError("insufficient_balance", "API 服务商余额不足或套餐已用尽。", {
       status,
-      hint: "请到中转站后台充值后重试。"
+      hint: "请到API 服务商后台充值后重试。"
     });
   }
 
   if (status === 429) {
-    return new AiChatError("rate_limit", "中转站限流了（请求过于频繁或并发超限）。", {
+    return new AiChatError("rate_limit", "API 服务商限流了（请求过于频繁或并发超限）。", {
       status,
       hint: "等几秒再发一次即可；连续出现说明需要降低发送频率。"
     });
   }
 
   if (status === 400) {
-    // 实测：中转站对「模型不可用」返回 400 + type=model_not_available（不是 404），所以两种都要认。
+    // 实测：API 服务商对「模型不可用」返回 400 + type=model_not_available（不是 404），所以两种都要认。
     const modelProblem = /(model_not_available|model_not_found|unsupported_model|unknown_model)/i.test(raw)
       || (/(model|模型)/i.test(lowered) && /(not\s*found|not\s*available|unsupported|invalid|不可用|不存在|不支持)/i.test(lowered));
     if (modelProblem) {
-      return new AiChatError("model_not_found", `中转站当前不提供模型「${AI_CHAT_MODEL_ID}」：${body.slice(0, 200)}`, {
+      return new AiChatError("model_not_found", `API 服务商当前不提供模型「${AI_CHAT_MODEL_ID}」：${body.slice(0, 200)}`, {
         status,
-        hint: "请在中转站模型列表里确认这个模型 ID 是否可用，或改用 AI_CHAT_MODEL 指定其他模型。"
+        hint: "请在API 服务商模型列表里确认这个模型 ID 是否可用，或在设置中选择其他文字模型。"
       });
     }
     if (/(balance|quota|credit|余额|额度)/i.test(lowered)) {
-      return new AiChatError("insufficient_balance", `中转站提示额度问题：${body.slice(0, 200)}`, { status });
+      return new AiChatError("insufficient_balance", `API 服务商提示额度问题：${body.slice(0, 200)}`, { status });
     }
-    return new AiChatError("unknown", `中转站认为请求不合法（HTTP 400）：${body.slice(0, 200)}`, { status });
+    return new AiChatError("unknown", `API 服务商认为请求不合法（HTTP 400）：${body.slice(0, 200)}`, { status });
   }
 
   if (status >= 500) {
-    return new AiChatError("server", `中转站暂时不可用（HTTP ${status}）。`, {
+    return new AiChatError("server", `API 服务商暂时不可用（HTTP ${status}）。`, {
       status,
-      hint: "稍后重试；连续多次失败可检查中转站状态页。"
+      hint: "稍后重试；连续多次失败可检查API 服务商状态页。"
     });
   }
 
-  return new AiChatError("unknown", `中转站返回 HTTP ${status}：${body.slice(0, 200)}`, { status });
+  return new AiChatError("unknown", `API 服务商返回 HTTP ${status}：${body.slice(0, 200)}`, { status });
 }
 
 /** 网络层/中断/异常 → 可读中文原因。 */
 export function classifyThrown(error: unknown): AiChatError {
+  const { AI_CHAT_BASE_URL } = getAiChatConfig();
   if (error instanceof AiChatError) return error;
 
   const message = error instanceof Error ? error.message : String(error);
@@ -180,7 +162,7 @@ export function classifyThrown(error: unknown): AiChatError {
   }
   if (/(ENOTFOUND|ECONNREFUSED|ETIMEDOUT|EAI_AGAIN|fetch failed|network|socket hang up|CERT|TLS)/i.test(message)) {
     if (/ENOTFOUND|EAI_AGAIN|getaddrinfo/i.test(message)) {
-      return new AiChatError("base_url", `连不上中转站地址 ${AI_CHAT_BASE_URL}（域名解析失败）。`, {
+      return new AiChatError("base_url", `连不上API 服务商地址 ${AI_CHAT_BASE_URL}（域名解析失败）。`, {
         hint: "请确认 TEAMOROUTER_BASE_URL 是否正确、本机网络是否可用。"
       });
     }
@@ -189,7 +171,7 @@ export function classifyThrown(error: unknown): AiChatError {
     });
   }
   if (/timeout/i.test(message)) {
-    return new AiChatError("network", "等待中转站响应超时。", { hint: "长回复可适当调大 AI_CHAT_TIMEOUT_MS。" });
+    return new AiChatError("network", "等待API 服务商响应超时。", { hint: "长回复可适当调大 AI_CHAT_TIMEOUT_MS。" });
   }
   return new AiChatError("unknown", maskSecrets(message).slice(0, 300) || "AI 回复失败，请稍后重试。");
 }
@@ -209,11 +191,15 @@ export interface StreamChatOptions {
 }
 
 /**
- * 流式调用中转站的 Anthropic Messages 接口。
+ * 流式调用API 服务商的 Anthropic Messages 接口。
  * 逐段回调文本增量（前端就是靠它做「逐字显示」），并把 tool_use 块解析出来交给调用方。
  */
 export async function streamAiChat(options: StreamChatOptions): Promise<StreamChatResult> {
-  const apiKey = AI_CHAT_ROUTE.provider.apiKey;
+  const { route, AI_CHAT_MODEL_ID, AI_CHAT_BASE_URL, AI_CHAT_TIMEOUT_MS, AI_CHAT_PROVIDER_ENV } = getAiChatConfig();
+  if (route.provider.protocol === "openai_compatible") {
+    return streamOpenAiCompatibleChat({ ...options, provider: route.provider, modelId: route.modelId, maxTokens: options.maxTokens ?? AI_CHAT_MAX_TOKENS, timeoutMs: options.timeoutMs ?? route.timeoutMs });
+  }
+  const apiKey = route.provider.apiKey;
   if (!apiKey) {
     throw new AiChatError("missing_key", `AI 对话模型还没有配置（缺少 ${AI_CHAT_PROVIDER_ENV || "API Key"}）。`, {
       hint: `请在 .env.local 中配置 ${AI_CHAT_PROVIDER_ENV || "TEAMOROUTER_API_KEY"}。`
@@ -236,7 +222,7 @@ export async function streamAiChat(options: StreamChatOptions): Promise<StreamCh
   if (options.tools && options.tools.length > 0) body.tools = options.tools;
 
   try {
-    const response = await fetch(`${AI_CHAT_BASE_URL}/v1/messages`, {
+    const response = await fetch(`${AI_CHAT_BASE_URL.replace(/\/v1$/, "")}/v1/messages`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -251,7 +237,7 @@ export async function streamAiChat(options: StreamChatOptions): Promise<StreamCh
       throw classifyHttpError(response.status, await response.text().catch(() => ""));
     }
     if (!response.body) {
-      throw new AiChatError("stream_interrupted", "中转站没有返回流式内容。");
+      throw new AiChatError("stream_interrupted", "API 服务商没有返回流式内容。");
     }
 
     const reader = response.body.getReader();
@@ -293,8 +279,8 @@ export async function streamAiChat(options: StreamChatOptions): Promise<StreamCh
         }
 
         if (payload.type === "error" || payload.error) {
-          const detail = payload.error?.message || "中转站在流式过程中返回错误";
-          throw new AiChatError("server", maskSecrets(detail).slice(0, 300));
+          const detail = payload.error?.message || "API 服务商在流式过程中返回错误";
+          throw new AiChatError("server", maskSecrets(detail.split(apiKey).join("[已隐藏]")).slice(0, 300));
         }
 
         if (payload.type === "content_block_start" && payload.content_block?.type === "tool_use") {
@@ -347,7 +333,7 @@ export async function streamAiChat(options: StreamChatOptions): Promise<StreamCh
 
     if (!sawMessageStop && !text && resolvedToolUses.length === 0) {
       throw new AiChatError("stream_interrupted", "流式回复中途断开，没有拿到完整内容。", {
-        hint: "重新发送一次即可；连续出现请检查中转站稳定性。"
+        hint: "重新发送一次即可；连续出现请检查API 服务商稳定性。"
       });
     }
 

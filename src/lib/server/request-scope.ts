@@ -1,4 +1,5 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { getLocalAccessUser } from "@/lib/auth/local-access";
 import { getSessionUser, isAuthDisabled, SESSION_COOKIE_NAME } from "@/lib/auth/session";
 
 /**
@@ -18,7 +19,9 @@ export async function ownershipScope(): Promise<OwnershipScope> {
   if (isAuthDisabled()) return { kind: "desktop" };
   try {
     const store = await cookies();
-    const user = await getSessionUser(store.get(SESSION_COOKIE_NAME)?.value);
+    const requestHeaders = await headers();
+    const user = await getLocalAccessUser(requestHeaders.get("host"), requestHeaders.get("origin"))
+      ?? await getSessionUser(store.get(SESSION_COOKIE_NAME)?.value);
     if (user) return { kind: "web", userId: user.id, role: user.role };
     // 理论上未登录请求已被 middleware 拦截；兜底给一个不可能匹配的 userId，默认全部不可见
     return { kind: "web", userId: "__anonymous__", role: "user" };

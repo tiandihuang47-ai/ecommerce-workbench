@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSessionUser, isAuthDisabled, SESSION_COOKIE_NAME } from "@/lib/auth/session";
+import { getLocalAccessUser } from "@/lib/auth/local-access";
 
 const SESSION_COOKIE = SESSION_COOKIE_NAME;
 
@@ -36,6 +37,12 @@ export async function middleware(request: NextRequest) {
 
   if (process.env.DIRECTOR_WEB_AUTH_DISABLED === "1") {
     return NextResponse.next();
+  }
+  const localUser = await getLocalAccessUser(request.headers.get("host"), request.headers.get("origin"));
+  if (localUser) {
+    return isPublicPage(pathname)
+      ? NextResponse.redirect(new URL("/", request.url))
+      : NextResponse.next();
   }
   if (isStaticAsset(pathname) || isPublicPage(pathname)) {
     return NextResponse.next();

@@ -1,5 +1,6 @@
 "use client";
 
+import { ApiConnectionsPanel } from "@/components/api-connections-panel";
 import { useEffect, useState } from "react";
 import { Download, KeyRound, Loader2, RefreshCw, Save, Trash2, Upload, Zap } from "lucide-react";
 import { PageHeader, SectionCard } from "@/components/design-system";
@@ -16,7 +17,7 @@ type ProviderDraft = { apiKey: string; workspaceId: string; baseUrl: string; mod
 type AssistantDraft = { apiKey: string; baseUrl: string; modelId: string };
 
 export function SystemSettingsPage() {
-  const [status, setStatus] = useState({ deepseekConfigured: false, arkConfigured: false, deepseekModel: "", speechModel: "", visionModel: "", aiChatConfigured: false, aiChatModel: "", aiChatProvider: "", aiChatBaseUrl: "", loaded: false });
+  const [status, setStatus] = useState({ deepseekConfigured: false, arkConfigured: false, speechConfigured: false, deepseekModel: "", speechModel: "", visionModel: "", aiChatConfigured: false, aiChatModel: "", aiChatProvider: "", aiChatBaseUrl: "", loaded: false });
   const [jsonText, setJsonText] = useState("");
   const [message, setMessage] = useState("");
   const [providers, setProviders] = useState<CommerceImageProviderStatus[]>([]);
@@ -42,6 +43,7 @@ export function SystemSettingsPage() {
       setStatus({
         deepseekConfigured: Boolean(payload.deepseekConfigured),
         arkConfigured: Boolean(payload.arkConfigured),
+        speechConfigured: Boolean(payload.speechConfigured),
         deepseekModel: typeof payload.deepseekModel === "string" ? payload.deepseekModel : "",
         speechModel: typeof payload.speechModel === "string" ? payload.speechModel : "",
         visionModel: typeof payload.visionModel === "string" ? payload.visionModel : "",
@@ -51,7 +53,7 @@ export function SystemSettingsPage() {
         aiChatBaseUrl: typeof payload.aiChatBaseUrl === "string" ? payload.aiChatBaseUrl : "",
         loaded: true,
       });
-      const nextProviders = Array.isArray(imagePayload.providers) ? imagePayload.providers as CommerceImageProviderStatus[] : [];
+      const nextProviders = Array.isArray(imagePayload.providers) ? (imagePayload.providers as CommerceImageProviderStatus[]).filter((p) => p.provider !== "configured") : [];
       setProviders(nextProviders);
       setProviderDrafts((current) => Object.fromEntries(nextProviders.map((provider) => [provider.provider, {
         apiKey: current[provider.provider]?.apiKey || "",
@@ -211,6 +213,10 @@ export function SystemSettingsPage() {
         action={<Button variant="outline" onClick={loadStatus}><RefreshCw className="h-4 w-4" />刷新状态</Button>}
       />
 
+      <ApiConnectionsPanel onSaved={() => void loadStatus()} />
+      <details className="rounded-2xl border border-border p-4">
+      <summary className="cursor-pointer text-sm font-medium">原有连接与数据管理</summary>
+      <p className="my-3 text-sm text-muted-foreground">已有配置和数据仍然保留。新增 API 请使用上方统一入口；以下旧版连接表单仅适用于原有通道。</p>
       <div className="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
         <div className="space-y-5">
           <SectionCard>
@@ -220,14 +226,14 @@ export function SystemSettingsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <ConfigRow
-                label="AI 对话（Claude Opus 5.5 · 中转站）"
+                label="AI 对话（当前功能模型）"
                 ok={status.aiChatConfigured}
                 loaded={status.loaded}
-                detail={`模型：${status.aiChatModel || "未知"}｜协议：Anthropic Messages${status.aiChatBaseUrl ? `｜中转站：${status.aiChatBaseUrl}` : ""}`}
+                detail={`模型：${status.aiChatModel || "未知"}｜连接：${status.aiChatProvider || "未知"}`}
               />
-              <ConfigRow label="DeepSeek（脚本 / 爆款复刻 / 复盘等）" ok={status.deepseekConfigured} loaded={status.loaded} detail={`模型：${status.deepseekModel || "未知"}`} />
-              <ConfigRow label="豆包语音转写（火山方舟）" ok={status.arkConfigured} loaded={status.loaded} detail={`模型：${status.speechModel || "未知"}`} />
-              <ConfigRow label="豆包视觉理解（火山方舟）" ok={status.arkConfigured} loaded={status.loaded} detail={`模型：${status.visionModel || "未知"}`} />
+              <ConfigRow label="爆款复刻文字模型" ok={status.deepseekConfigured} loaded={status.loaded} detail={`模型：${status.deepseekModel || "未知"}`} />
+              <ConfigRow label="语音转写模型" ok={status.speechConfigured} loaded={status.loaded} detail={`模型：${status.speechModel || "未知"}`} />
+              <ConfigRow label="看图模型" ok={status.arkConfigured} loaded={status.loaded} detail={`模型：${status.visionModel || "未知"}`} />
             </CardContent>
           </SectionCard>
 
@@ -284,7 +290,7 @@ export function SystemSettingsPage() {
         <SectionCard>
           <CardHeader>
             <CardTitle>AI 理解与对话</CardTitle>
-            <CardDescription>详情长图拆解需要视觉模型，需求沟通和营销策划需要文本模型。仍兼容原 .env.local 配置。</CardDescription>
+            <CardDescription>旧版连接测试入口，不改变各功能使用的模型。新增或切换模型请使用上方统一 API 配置。</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {assistants.map((provider) => {
@@ -320,6 +326,7 @@ export function SystemSettingsPage() {
         </SectionCard>
         </div>
       </div>
+      </details>
     </div>
   );
 }

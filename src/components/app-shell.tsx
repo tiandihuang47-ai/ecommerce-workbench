@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AppSidebar, adminNavItem, filterNavItemsForUser, sidebarNavItems } from "@/components/app-sidebar";
+import { AppSidebar, filterNavItemsForUser, sidebarNavItems } from "@/components/app-sidebar";
 import { StorageStatusBanner } from "@/components/storage-status-banner";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuthUser } from "@/lib/auth/use-auth-user";
@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 const sidebarCollapsedKey = "director-platform.sidebarCollapsed";
 
 /** 这些页面不需要等待按账号的数据水合 */
-const STORAGE_FREE_PATHS = ["/login", "/setup", "/admin"];
+const STORAGE_FREE_PATHS = ["/login", "/setup"];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -36,11 +36,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // 只作用于该路由，其他模块保持原有文档流布局。
   const fullBleedWorkbench = pathname === "/script-generator";
 
-  // 网页模式下按角色过滤导航（普通成员不显示设置），管理员额外显示管理后台
+  // 网页模式下按角色过滤导航（普通成员不显示设置）
   const mobileNavItems = filterNavItemsForUser(sidebarNavItems, auth);
-  if (auth.authEnabled && auth.user?.role === "admin") {
-    mobileNavItems.push(adminNavItem);
-  }
 
   // 网页模式：等服务器上的按账号数据水合完成后再渲染业务页面，避免读到空数据
   const storageReady = useWebStorageReady();

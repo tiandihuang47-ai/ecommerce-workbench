@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { deepseekModelId } from "@/lib/deepseek-client";
-import { findModel, findProvider } from "@/lib/model-router";
+import { findModel, findProvider, resolveRoute } from "@/lib/model-router";
 import { commerceImageModelRegistry, commerceImageRegistryModelForProvider } from "@/lib/commerce-image-models";
 import type {
   CommerceAssistantProviderStatus,
@@ -11,7 +11,7 @@ import type {
 } from "@/lib/commerce-image-types";
 
 /** 生图通道。阿里云（qwen / 通义万相）已下线，全部走豆包 Seedream 或 GPT Image。 */
-export type CommerceImageProvider = "seedream" | "openai" | "openai_v25";
+export type CommerceImageProvider = "seedream" | "openai" | "openai_v25" | "configured";
 export type CommerceAssistantProvider = "text" | "vision";
 
 interface StoredProviderConfig {
@@ -38,6 +38,7 @@ export interface ResolvedProviderConfig {
   source: "local" | "environment" | "none";
   lastVerifiedAt: string;
   verifiedForCurrentConfig: boolean;
+  imageAdapter?: "openai" | "seedream";
 }
 
 export interface ResolvedAssistantConfig {
@@ -63,6 +64,12 @@ export async function ensureCommerceImageDataRoot() {
 }
 
 export async function getResolvedProviderConfig(provider: CommerceImageProvider): Promise<ResolvedProviderConfig> {
+  if (provider === "configured") {
+    const r = resolveRoute("image_generation");
+    const p = findProvider(findModel(r.modelAlias).provider);
+    const local = p.connectionStore?.startsWith("local:");
+    return { provider, apiKey: local ? r.provider.apiKey : "", workspaceId: "", baseUrl: r.provider.baseUrl, modelId: r.modelId, source: local ? "local" : "none", lastVerifiedAt: "", verifiedForCurrentConfig: false, imageAdapter: p.imageAdapter || "openai" };
+  }
   const stored = (await readStoredConfig()).providers[provider] || {};
   const environment = environmentProviderConfig(provider);
   const apiKey = stored.apiKey?.trim() || environment.apiKey;
@@ -104,12 +111,13 @@ export async function getResolvedAssistantConfig(provider: CommerceAssistantProv
 
 export async function listCommerceImageProviderStatuses(): Promise<CommerceImageProviderStatus[]> {
   const providers: CommerceImageProvider[] = ["seedream", "openai", "openai_v25"];
+  if (resolveRoute("image_generation").provider.connectionStore?.startsWith("local:")) providers.push("configured");
   return Promise.all(providers.map(async (provider) => {
     const config = await getResolvedProviderConfig(provider);
     const model = modelForProvider(provider);
     return {
       provider,
-      label: provider === "seedream" ? "豆包 Seedream" : provider === "openai_v25" ? "OpenAI GPT Image 2.5" : commerceImageModelRegistry[model].label,
+      label: provider === "configured" ? `我的生图模型 · ${config.modelId}` : provider === "seedream" ? "豆包 Seedream" : provider === "openai_v25" ? "OpenAI GPT Image 2.5" : commerceImageModelRegistry[model].label,
       modelId: model,
       providerModelId: config.modelId,
       configured: Boolean(config.apiKey),
@@ -215,6 +223,16 @@ export function modelForProvider(provider: CommerceImageProvider): ResolvedComme
 
 export function providerForModel(model: ResolvedCommerceImageModel): CommerceImageProvider {
   return commerceImageModelRegistry[model].provider;
+}
+
+/** Keep the UI's stable adapter keys separate from user-entered model IDs. */
+export function imageRegistryKeyForAlias(alias: string): ResolvedCommerceImageModel {
+  const model = findModel(alias);
+  const provider = findProvider(model.provider);
+  if (provider.connectionStore?.startsWith("local:")) return "configured";
+  if (commerceImageModelRegistry[model.modelId as ResolvedCommerceImageModel]) return model.modelId as ResolvedCommerceImageModel;
+  if (provider.connectionStore === "seedream" || provider.connectionStore === "openai" || provider.connectionStore === "openai_v25") return modelForProvider(provider.connectionStore);
+  throw new Error(`生图模型 ${model.label} 缺少可用的接口适配器，请在设置中选择生图接口类型。`);
 }
 
 async function configPath() {

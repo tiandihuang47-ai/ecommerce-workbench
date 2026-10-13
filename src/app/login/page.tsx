@@ -102,7 +102,7 @@ function LoginForm() {
             >
               {submitting ? "正在登录…" : "登录"}
             </button>
-            <p className="text-center text-xs text-muted-foreground">没有账号？请联系管理员在「管理后台」开通</p>
+            <p className="text-center text-xs text-muted-foreground">没有账号？请联系系统维护者。</p>
           </form>
         )}
       </div>

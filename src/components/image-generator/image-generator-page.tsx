@@ -73,6 +73,7 @@ export function ImageGeneratorPage() {
   const [providers, setProviders] = useState<Array<{ provider: string; label: string; configured: boolean; maskedKey: string; verifiedForCurrentConfig: boolean; message: string }>>([]);
   const [referenceLink, setReferenceLink] = useState("");
   const [goal, setGoal] = useState<SocialGoal>("traffic");
+  const defaultModelRef = useRef<CommerceImageModel>(DEFAULT_COMMERCE_IMAGE_MODEL);
   const [controls, setControls] = useState<Controls>({
     model: DEFAULT_COMMERCE_IMAGE_MODEL,
     ratio: "9:16",
@@ -158,6 +159,7 @@ export function ImageGeneratorPage() {
           requestJson<{ providers: typeof providers }>("/api/commerce-image/providers").catch(() => ({ providers: [] }))
         ]);
         setProviders(providerPayload.providers || []);
+        if (providerPayload.providers?.some((p) => p.provider === "configured" && p.configured)) defaultModelRef.current = "configured";
         /* 只有 URL 明确带任务时才直接进任务；否则停在首页，由用户点模式卡片时恢复最近任务。 */
         const taskId = new URLSearchParams(window.location.search).get("task");
         const found = list.find((item) => item.id === taskId);
@@ -185,7 +187,7 @@ export function ImageGeneratorPage() {
     setControls({
       /* 「自动推荐」是旧版本的默认值，不代表用户主动选过；统一落到新默认模型，
        * 用户自己选过的其它模型照旧保留。 */
-      model: draft?.model || (current.model === "auto" ? DEFAULT_COMMERCE_IMAGE_MODEL : current.model),
+      model: draft?.model || current.model,
       ratio: draft?.ratio || current.ratio,
       count: draft?.count || current.brief.cardCount,
       quality: draft?.quality || current.quality || "high"
@@ -419,7 +421,7 @@ export function ImageGeneratorPage() {
         body: JSON.stringify({
           kind,
           title: `${commerceImageTaskLabels[kind].title} · ${new Date().toLocaleDateString("zh-CN")}`,
-          model: DEFAULT_COMMERCE_IMAGE_MODEL,
+          model: defaultModelRef.current,
           ratio: commerceImageTaskLabels[kind].defaultRatio,
           generationSetCount: 1,
           quality: "high",

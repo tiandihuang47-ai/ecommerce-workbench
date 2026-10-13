@@ -1,4 +1,5 @@
 import { getResolvedProviderConfig, providerForModel } from "@/lib/commerce-image-config";
+import { redactLocalSecrets } from "@/lib/model-router/profile-store";
 import { readImageMetadata } from "@/lib/commerce-image-file";
 import { now, since, trace } from "@/lib/perf-trace";
 import type { CommerceImageQuality, CommerceImageSize, CommerceImageStructuredError, ResolvedCommerceImageModel } from "@/lib/commerce-image-types";
@@ -57,7 +58,7 @@ export async function generateCommerceImage(input: CommerceImageGenerationInput)
     retryable: false,
     provider
   });
-  if (provider === "seedream") return generateWithSeedream(input, config);
+  if (provider === "seedream" || config.imageAdapter === "seedream") return generateWithSeedream(input, config);
   return generateWithOpenAI(input, config);
 }
 
@@ -84,7 +85,7 @@ export async function verifyCommerceImageProvider(modelId: ResolvedCommerceImage
     if (!url) throw providerPayloadError(payload, "openai_v25", "GPT Image 没有返回可用图片。");
     return { bytes: await downloadImage(url, undefined, "openai_v25"), providerModelId: config.modelId };
   }
-  const size = provider === "seedream"
+  const size = provider === "seedream" || (provider === "configured" && (await getResolvedProviderConfig(provider)).imageAdapter === "seedream")
     ? { width: 2048, height: 2048, label: "2048 × 2048" }
     : { width: 1024, height: 1024, label: "1024 × 1024" };
   return generateCommerceImage({
@@ -170,6 +171,9 @@ async function generateWithOpenAI(
     if (requestedSize.width % 2 === 0 && requestedSize.height % 2 === 0) {
       body.size = `${requestedSize.width}x${requestedSize.height}`;
     }
+  } else if (config.provider === "configured") {
+    // Generic Images API: avoid vendor-specific quality and output fields.
+    body.size = `${input.size.width}x${input.size.height}`;
   } else {
     body.output_format = "png";
     body.quality = input.quality === "standard" ? "standard" : "hd";
@@ -272,7 +276,7 @@ async function readJsonResponse(response: Response, provider: string): Promise<u
   return payload;
 }
 
-async function downloadImage(url: string, signal: AbortSignal | undefined, provider: "seedream" | "openai" | "openai_v25") {
+async function downloadImage(url: string, signal: AbortSignal | undefined, provider: "seedream" | "openai" | "openai_v25" | "configured") {
   let lastStatus = 0;
   for (let attempt = 0; attempt < 2; attempt += 1) {
     /* 中转站返回的临时图片外链实测可能慢到 25KB/s（1.6MB 需 60 秒以上），60 秒会把
@@ -297,7 +301,7 @@ async function providerFetch(
   url: string,
   init: RequestInit,
   externalSignal: AbortSignal | undefined,
-  provider: "seedream" | "openai" | "openai_v25",
+  provider: "seedream" | "openai" | "openai_v25" | "configured",
   /* 实测 GPT Image 2.5 单张常见 90-160 秒，偶发超过 3 分钟；原来的 180 秒会把
    * 这类「慢但成功」的请求判成超时，用户既拿不到图又已经付费。放宽到 5 分钟。 */
   timeoutMs = 300_000
@@ -424,7 +428,7 @@ function extractRequestId(value: unknown): string {
   return "";
 }
 
-function providerPayloadError(value: unknown, provider: "seedream" | "openai" | "openai_v25", fallback: string) {
+function providerPayloadError(value: unknown, provider: "seedream" | "openai" | "openai_v25" | "configured", fallback: string) {
   const message = extractProviderMessage(value) || fallback;
   return classifyProviderError(200, value, provider, message);
 }
@@ -473,13 +477,14 @@ function classifyProviderError(status: number, payload: unknown, providerLabelVa
 }
 
 export function sanitizeProviderMessage(value: string) {
-  return value
+  return redactLocalSecrets(value)
     .replace(/(?:sk|ak)-[A-Za-z0-9_-]{8,}/g, "[已隐藏密钥]")
     .replace(/Bearer\s+[A-Za-z0-9._-]+/gi, "Bearer [已隐藏]")
     .slice(0, 500);
 }
 
-function providerLabel(provider: "seedream" | "openai" | "openai_v25") {
+function providerLabel(provider: "seedream" | "openai" | "openai_v25" | "configured") {
+  if (provider === "configured") return "我的生图 API";
   if (provider === "seedream") return "Seedream";
   if (provider === "openai_v25") return "GPT Image 2.5";
   return "GPT Image";

@@ -16,7 +16,6 @@ import {
   PanelLeftOpen,
   Puzzle,
   Settings,
-  ShieldCheck,
   WandSparkles,
   type LucideIcon
 } from "lucide-react";
@@ -80,12 +79,6 @@ export const sidebarNavItems: SidebarNavItem[] = [
   settingsNavItem
 ];
 
-export const adminNavItem: SidebarNavItem = {
-  title: "管理后台",
-  href: "/admin",
-  icon: ShieldCheck
-};
-
 /** 网页模式下普通成员不显示「设置」；桌面端与管理员保持原样 */
 export function filterNavItemsForUser(items: SidebarNavItem[], auth: { authEnabled: boolean; user: { role: "admin" | "user" } | null }) {
   if (!auth.authEnabled) return items;
@@ -103,7 +96,6 @@ function isItemActive(pathname: string, item: SidebarNavItem) {
 export function AppSidebar({ collapsed = false, onToggleCollapsed }: { collapsed?: boolean; onToggleCollapsed?: () => void }) {
   const pathname = usePathname();
   const auth = useAuthUser();
-  const showAdmin = auth.authEnabled && auth.user?.role === "admin";
   const showSettings = !auth.authEnabled || !auth.user || auth.user.role === "admin";
 
   return (
@@ -180,22 +172,6 @@ export function AppSidebar({ collapsed = false, onToggleCollapsed }: { collapsed
       </nav>
 
       <div className="shrink-0 border-t border-border p-2">
-        {showAdmin ? (
-          <Link
-            href={adminNavItem.href}
-            title={collapsed ? adminNavItem.title : undefined}
-            className={cn(
-              "group relative flex h-9 w-full items-center rounded-lg text-sm transition-colors duration-150",
-              collapsed ? "justify-center" : "gap-2.5 px-2.5",
-              isItemActive(pathname, adminNavItem)
-                ? "bg-card text-foreground font-medium ring-1 ring-border/70 shadow-[0_1px_2px_rgba(15,23,42,0.05),0_3px_8px_rgba(15,23,42,0.09)] dark:bg-white/[0.08] dark:ring-white/10 dark:shadow-none"
-                : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-            )}
-          >
-            <adminNavItem.icon className="h-[18px] w-[18px] shrink-0" />
-            {!collapsed ? <span className="truncate">{adminNavItem.title}</span> : null}
-          </Link>
-        ) : null}
         {showSettings ? (
           <Link
             href={settingsNavItem.href}
@@ -221,14 +197,14 @@ export function AppSidebar({ collapsed = false, onToggleCollapsed }: { collapsed
                   {auth.user.nickname}
                 </span>
               ) : null}
-              <button
+              {!auth.localAccess ? <button
                 type="button"
                 onClick={() => void logout()}
                 title="退出登录"
                 className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/70 transition-colors hover:bg-muted hover:text-foreground"
               >
                 <LogOut className="h-3.5 w-3.5" />
-              </button>
+              </button> : null}
             </div>
           ) : (
             !collapsed ? <span className="text-[11px] text-muted-foreground/60">本地保存</span> : null

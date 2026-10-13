@@ -1,5 +1,6 @@
 import { getSessionUser, isAuthDisabled, SESSION_COOKIE_NAME } from "@/lib/auth/session";
 import type { AuthUserRecord } from "@/lib/auth/users";
+import { getLocalAccessUser } from "@/lib/auth/local-access";
 
 export { isAuthDisabled };
 
@@ -21,6 +22,8 @@ function sessionCookieValue(request: Request): string | undefined {
  */
 export async function getSessionUserFromRequest(request: Request): Promise<AuthUserRecord | null> {
   if (isAuthDisabled()) return null;
+  const localUser = await getLocalAccessUser(request.headers.get("host"), request.headers.get("origin"));
+  if (localUser) return localUser;
   return getSessionUser(sessionCookieValue(request));
 }
 
