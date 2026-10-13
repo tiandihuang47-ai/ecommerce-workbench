@@ -1,4 +1,4 @@
-import { denyIfUnauthenticated } from "@/lib/auth/guard";
+import { adminGuardFailure, requireAdminFromRequest } from "@/lib/auth/guard";
 import { access, stat } from "node:fs/promises";
 import { NextResponse } from "next/server";
 import { extractAudioFromVideo } from "@/lib/audio-extractor";
@@ -32,8 +32,8 @@ interface DebugResultInput {
 }
 
 export async function POST(request: Request) {
-  const deny = await denyIfUnauthenticated(request);
-  if (deny) return deny;
+  const adminFailure = await adminGuardFailure(await requireAdminFromRequest(request));
+  if (adminFailure) return adminFailure;
   const steps: TranscriptDebugStep[] = [];
   let rawError = "";
   let sourceType: DebugResultInput["sourceType"] = "link";

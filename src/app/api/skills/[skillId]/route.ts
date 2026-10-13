@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { rm } from "node:fs/promises";
-import { adminGuardFailure, requireAdminFromRequest } from "@/lib/auth/guard";
+import { adminGuardFailure, denyIfUnauthenticated, requireAdminFromRequest } from "@/lib/auth/guard";
 import { skillDirectory } from "@/lib/skills/paths";
 import { toPublicSkill } from "@/lib/skills/public-skill";
 import { getSkillManifest, patchSkillManifest, removeSkillManifest } from "@/lib/skills/registry";
@@ -8,7 +8,9 @@ import { getSkillManifest, patchSkillManifest, removeSkillManifest } from "@/lib
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET(_request: Request, context: { params: Promise<{ skillId: string }> }) {
+export async function GET(request: Request, context: { params: Promise<{ skillId: string }> }) {
+  const deny = await denyIfUnauthenticated(request);
+  if (deny) return deny;
   const { skillId } = await context.params;
   const manifest = await getSkillManifest(skillId);
   if (!manifest) return NextResponse.json({ success: false, message: "没有找到这个 Skill。" }, { status: 404 });

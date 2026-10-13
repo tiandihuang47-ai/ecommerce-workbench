@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { adminGuardFailure, requireAdminFromRequest } from "@/lib/auth/guard";
+import { adminGuardFailure, denyIfUnauthenticated, requireAdminFromRequest } from "@/lib/auth/guard";
 import {
   disableCommerceImageStyleSkill,
   importCommerceImageStyleSkill,
@@ -10,7 +10,9 @@ import {
 export const runtime = "nodejs";
 
 /** 风格库是全体同事共用的本机资源：读放开给登录用户，导入/停用仅管理员。 */
-export async function GET() {
+export async function GET(request: Request) {
+  const deny = await denyIfUnauthenticated(request);
+  if (deny) return deny;
   return NextResponse.json({ success: true, skills: (await listCommerceImageStyleSkills()).map(toPublicCommerceImageStyleSkill) });
 }
 

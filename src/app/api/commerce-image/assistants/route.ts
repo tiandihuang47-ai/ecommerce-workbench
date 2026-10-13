@@ -1,4 +1,4 @@
-import { denyIfUnauthenticated } from "@/lib/auth/guard";
+import { adminGuardFailure, denyIfUnauthenticated, requireAdminFromRequest } from "@/lib/auth/guard";
 import { NextResponse } from "next/server";
 import {
   deleteCommerceAssistantConfig,
@@ -11,13 +11,15 @@ import { verifyCommerceAssistant } from "@/lib/commerce-image-ai";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const deny = await denyIfUnauthenticated(request);
+  if (deny) return deny;
   return NextResponse.json({ success: true, providers: await listCommerceAssistantStatuses() });
 }
 
 export async function PATCH(request: Request) {
-  const deny = await denyIfUnauthenticated(request);
-  if (deny) return deny;
+  const adminFailure = await adminGuardFailure(await requireAdminFromRequest(request));
+  if (adminFailure) return adminFailure;
   const body = await jsonBody(request);
   if (!body || !isCommerceAssistantProvider(body.provider)) return failure("请选择有效的 AI 理解服务。");
   await saveCommerceAssistantConfig(body.provider, {
@@ -29,8 +31,8 @@ export async function PATCH(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const deny = await denyIfUnauthenticated(request);
-  if (deny) return deny;
+  const adminFailure = await adminGuardFailure(await requireAdminFromRequest(request));
+  if (adminFailure) return adminFailure;
   const body = await jsonBody(request);
   if (!body || !isCommerceAssistantProvider(body.provider)) return failure("请选择有效的 AI 理解服务。");
   await saveCommerceAssistantConfig(body.provider, {
@@ -48,8 +50,8 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const deny = await denyIfUnauthenticated(request);
-  if (deny) return deny;
+  const adminFailure = await adminGuardFailure(await requireAdminFromRequest(request));
+  if (adminFailure) return adminFailure;
   const provider = new URL(request.url).searchParams.get("provider");
   if (!isCommerceAssistantProvider(provider)) return failure("请选择有效的 AI 理解服务。");
   await deleteCommerceAssistantConfig(provider);

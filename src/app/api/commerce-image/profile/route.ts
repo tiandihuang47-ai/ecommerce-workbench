@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { adminGuardFailure, requireAdminFromRequest } from "@/lib/auth/guard";
+import { adminGuardFailure, denyIfUnauthenticated, requireAdminFromRequest } from "@/lib/auth/guard";
 import { getCommerceBrandProfile, saveCommerceBrandProfile } from "@/lib/commerce-image-store";
 
 export const runtime = "nodejs";
 
 /** 品牌档案为全局共享：读放开给登录用户，写入仅管理员。 */
-export async function GET() {
+export async function GET(request: Request) {
+  const deny = await denyIfUnauthenticated(request);
+  if (deny) return deny;
   return NextResponse.json({ success: true, profile: await getCommerceBrandProfile() });
 }
 

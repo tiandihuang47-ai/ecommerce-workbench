@@ -4,7 +4,9 @@ import { createExperiment, listExperiments } from "@/lib/marketing-learning";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const deny = await denyIfUnauthenticated(request);
+  if (deny) return deny;
   return NextResponse.json({ success: true, experiments: await listExperiments() });
 }
 

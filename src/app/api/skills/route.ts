@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { rm } from "node:fs/promises";
-import { adminGuardFailure, requireAdminFromRequest } from "@/lib/auth/guard";
+import { adminGuardFailure, denyIfUnauthenticated, requireAdminFromRequest } from "@/lib/auth/guard";
 import { isSafeRelativePath, type ExtractedFile } from "@/lib/skills/archive";
 import { skillRuntimeConfig } from "@/lib/skills/config";
 import { importSkillPackage } from "@/lib/skills/importer";
@@ -14,7 +14,9 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /** 列出全部 Skill。前台只拿到口语化的状态。 */
-export async function GET() {
+export async function GET(request: Request) {
+  const deny = await denyIfUnauthenticated(request);
+  if (deny) return deny;
   const manifests = await listSkillManifests();
   return NextResponse.json({ success: true, skills: manifests.map((manifest) => toPublicSkill(manifest)) });
 }
@@ -101,6 +103,8 @@ export async function POST(request: Request) {
 
 /** 安全清理（§43）：只删除本 Skill 自己的目录。 */
 export async function DELETE(request: Request) {
+  const adminFailure = await adminGuardFailure(await requireAdminFromRequest(request));
+  if (adminFailure) return adminFailure;
   const skillId = new URL(request.url).searchParams.get("skillId") || "";
   if (!skillId) return NextResponse.json({ success: false, message: "缺少 skillId。" }, { status: 400 });
   try {
